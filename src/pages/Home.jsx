@@ -1,7 +1,28 @@
-import React from 'react'
+import { Check } from "@mui/icons-material";
+import React from "react";
+import checkAuth from "../../hoc/checkToken";
+import { useSelector } from "react-redux";
+import Navbar from "../../Components/UI/Navbar";
+import Recents from "../../Components/UI/Recents";
+import Login from "./Login";
+import Calendar from "../../Components/UI/Calendar";
 
-export default function Home() {
+function Home() {
+  const user = useSelector((state) => state.auth.user);
+
   return (
-    <div>Home</div>
-  )
+    <>
+      {user ? (
+        <>
+          <Navbar />
+          <Recents />
+          <Calendar />
+        </>
+      ) : (
+        <Login />
+      )}
+    </>
+  );
 }
+
+export default checkAuth(Home);

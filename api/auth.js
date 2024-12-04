@@ -50,15 +50,14 @@ export const logout = async (body) => {
   return await response.json();
 };
 
-export const search = async (body) => {
+export const search = async (toekn) => {
   const response = await fetch(`${url}/search`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
-      Authorization: `Bearer ${body}`,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify(body),
   });
   return await response.json();
 };

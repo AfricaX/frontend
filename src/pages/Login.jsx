@@ -1,13 +1,17 @@
 import React from "react";
-
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { login } from "../../api/auth";
+import { login as loginAPI } from "../../api/auth";
 import $ from "jquery";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
+import { login } from "../../redux/authSlice";
 
 export default function Login() {
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const dispatch = useDispatch();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -16,10 +20,12 @@ export default function Login() {
       email: $("#email").val(),
       password: $("#password").val(),
     };
-    login(body).then((response) => {
+    loginAPI(body).then((response) => {
       if (response?.ok) {
         toast.success(response?.message);
         navigate("/");
+        setCookie("AUTH_TOKEN", response.data.token);
+        dispatch(login(response.data));
       } else {
         toast.error(response?.message);
       }
@@ -34,13 +40,13 @@ export default function Login() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
           width: "50vh",
           border: "1px solid black",
           borderRadius: "10px",
           padding: "50px",
           boxShadow: "5px 5px 5px #aaaaaa",
           backgroundColor: "white",
+          height: "450px",
         }}
         onSubmit={onSubmit}
       >

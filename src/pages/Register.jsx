@@ -2,13 +2,19 @@ import { Margin } from "@mui/icons-material";
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import $ from "jquery";
-import { register } from "../../api/auth";
+import { login, register } from "../../api/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useDispatch } from "react-redux";
 
 export default function Register() {
   const [warning, setWarning] = useState({});
   const navigate = useNavigate();
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const dispatch = useDispatch();
+
+  /**Submit Function */
   const onSubmit = (e) => {
     e.preventDefault();
 
@@ -23,6 +29,8 @@ export default function Register() {
       if (response?.ok) {
         toast.success(response?.message);
         navigate("/");
+        setCookie("AUTH_TOKEN", response.data.token);
+        dispatch(login(response.data));
       } else {
         toast.error(response?.message);
         setWarning(response?.errors);
