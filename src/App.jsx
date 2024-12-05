@@ -3,9 +3,9 @@ import "./App.css";
 import Register from "./pages/Register";
 import Home from "./pages/Home";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import Login from "./pages/login";
 import { store } from "../redux/store";
 import { Provider } from "react-redux";
+import Login from "./pages/Login";
 
 function App() {
   const router = createBrowserRouter([
