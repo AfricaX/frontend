@@ -25,7 +25,7 @@ export default function Register() {
       password_confirmation: $("#password_confirmation").val(),
     };
 
-    register(body).then((response) => {
+    register(cookies.AUTHTOEKN).then((response) => {
       if (response?.ok) {
         toast.success(response?.message);
         navigate("/");

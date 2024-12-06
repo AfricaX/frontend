@@ -49,6 +49,10 @@ export default function Recents() {
     });
   };
 
+  // const filterData = () => {
+  //   const filteredData = rows.filter((item => items.created_at ) => {
+  // };
+
   useEffect(() => {
     retrieve();
   }, []);
@@ -94,7 +98,7 @@ export default function Recents() {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {rows.map((row) => (
+                {rows.slice().reverse().map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import { useCookies } from "react-cookie";
 import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
-import RoomsDialog from "../Dialogs/RoomsDialog";
+import RoomsListDialog from "../Dialogs/RoomsListDialog";
 
 export default function Navbar() {
   
@@ -29,10 +29,10 @@ export default function Navbar() {
   };
 
   /** ROOMS DIALOG */
-  const [openRoomsDialog, setOpenRoomsDialog] = useState(false);
+  const [openRoomsListDialog, setOpenRoomsListDialog] = useState(false);
 
   const handleRoomsClick = () => {
-    setOpenRoomsDialog(true);
+    setOpenRoomsListDialog(true);
   };
 
   return (
@@ -102,9 +102,9 @@ export default function Navbar() {
         </Box>
       </AppBar>
 
-      <RoomsDialog
-        openRoomsDialog={openRoomsDialog}
-        setOpenRoomsDialog={setOpenRoomsDialog}
+      <RoomsListDialog
+        openRoomsListDialog={openRoomsListDialog}
+        setOpenRoomsListDialog={setOpenRoomsListDialog}
       />
     </>
   );
