@@ -18,6 +18,8 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateRoomsDialog from "../Dialogs/Rooms CRUD/CreateRoomsDialog";
 import ViewRoomsDialog from "../Dialogs/Rooms CRUD/ViewRoomsDialog";
+import EditRoomsDialog from "../Dialogs/Rooms CRUD/EditRoomsDialog";
+import DeleteRoomsDialog from "../Dialogs/Rooms CRUD/DeleteRoomsDialog";
 
 export default function Rooms() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
@@ -53,6 +55,26 @@ export default function Rooms() {
 
   const handleOpenViewRoomsDialog = () => {
     setOpenViewRoomsDialog(true);
+  };
+
+  /**
+   * Edit Rooms Dialog
+   */
+
+  const [openEditRoomsDialog, setOpenEditRoomsDialog] = useState(false);
+
+  const handleOpenEditRoomsDialog = () => {
+    setOpenEditRoomsDialog(true);
+  };
+
+  /**
+   * Delete Rooms Dialog
+   */
+
+  const [openDeleteRoomsDialog, setOpenDeleteRoomsDialog] = useState(false);
+
+  const handleOpenDeleteRoomsDialog = () => {
+    setOpenDeleteRoomsDialog(true);
   };
 
   return (
@@ -99,7 +121,18 @@ export default function Rooms() {
           <ViewRoomsDialog
             openViewRoomsDialog={openViewRoomsDialog}
             setOpenViewRoomsDialog={setOpenViewRoomsDialog}
-            />
+          />
+
+          <EditRoomsDialog
+            retrieve={retrieve}
+            openEditRoomsDialog={openEditRoomsDialog}
+            setOpenEditRoomsDialog={setOpenEditRoomsDialog}
+          />
+          <DeleteRoomsDialog
+            retrieve={retrieve}
+            openDeleteRoomsDialog={openDeleteRoomsDialog}
+            setOpenDeleteRoomsDialog={setOpenDeleteRoomsDialog}
+          />
           <TableContainer component={Paper}>
             <Table sx={{ minWidth: 50 }} aria-label="simple table">
               <TableHead>
@@ -132,8 +165,16 @@ export default function Rooms() {
                           onClick={handleOpenViewRoomsDialog}
                           cursor={"pointer"}
                         />{" "}
-                        <EditIcon sx={{ flex: 1 }} cursor={"pointer"} />
-                        <DeleteIcon sx={{ flex: 1 }} cursor={"pointer"} />
+                        <EditIcon
+                          sx={{ flex: 1 }}
+                          onClick={handleOpenEditRoomsDialog}
+                          cursor={"pointer"}
+                        />
+                        <DeleteIcon
+                          sx={{ flex: 1 }}
+                          onClick={handleOpenDeleteRoomsDialog}
+                          cursor={"pointer"}
+                        />
                       </Box>
                     </TableCell>
                   </TableRow>
