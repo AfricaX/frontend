@@ -115,7 +115,7 @@ export default function Rooms() {
           <Button
             variant="contained"
             color="success"
-            sx={{ position: "absolute", right: "40px", top: "45px" }}
+            sx={{ position: "absolute", right: "40px", top: "65px" }}
             onClick={handleOpenCreateRooms}
           >
             Create Room

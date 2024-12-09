@@ -8,6 +8,7 @@ import { useCookies } from "react-cookie";
 import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import RoomsListDialog from "../Dialogs/RoomsListDialog";
+import BookingListDialog from "../Dialogs/BookingListDialog";
 
 export default function Navbar() {
   
@@ -33,6 +34,16 @@ export default function Navbar() {
 
   const handleRoomsClick = () => {
     setOpenRoomsListDialog(true);
+  };
+
+  /**
+   * BOOKINGS DIALOG
+   */
+
+  const [openBookingListDialog, setOpenBookingListDialog] = useState(false);
+  
+  const handleBookingsClick = () => {
+    setOpenBookingListDialog(true);
   };
 
   return (
@@ -79,11 +90,22 @@ export default function Navbar() {
                 color: "#2f3a8f",
                 flex: 1,
                 fontSize: "20px",
-                marginRight: "20px",
               }}
+              onClick={handleBookingsClick}
             >
               Bookings
             </Button>
+
+            <Button
+              sx={{
+                color: "#2f3a8f",
+                flex: 1,
+                fontSize: "20px",
+              }}
+            >
+              Tools
+            </Button>
+
             <Button
               variant="outlined"
               color="error"
@@ -105,6 +127,11 @@ export default function Navbar() {
       <RoomsListDialog
         openRoomsListDialog={openRoomsListDialog}
         setOpenRoomsListDialog={setOpenRoomsListDialog}
+      />
+
+      <BookingListDialog
+        openBookingListDialog={openBookingListDialog}
+        setOpenBookingListDialog={setOpenBookingListDialog}
       />
     </>
   );

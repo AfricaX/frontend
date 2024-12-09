@@ -49,10 +49,6 @@ export default function Recents() {
     });
   };
 
-  // const filterData = () => {
-  //   const filteredData = rows.filter((item => items.created_at ) => {
-  // };
-
   useEffect(() => {
     retrieve();
   }, []);

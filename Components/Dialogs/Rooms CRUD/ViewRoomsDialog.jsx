@@ -101,6 +101,7 @@ export default function ViewRoomsDialog({
             sx={{ position: "absolute", right: "20px", top: "10px" }}
             onClick={() => setOpenViewRoomsDialog(null)}
             variant="outlined"
+            color="error"
           >
             X
           </Button>
