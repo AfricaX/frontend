@@ -1,16 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
 import { Box, Button, TextField, InputLabel } from "@mui/material";
-import { updateRoom } from '../../../api/room';
-import { useCookies } from 'react-cookie';
+import { updateRoom } from "../../../api/room";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import $ from "jquery";
 import { retrieveRoomTypes } from "../../../api/roomtype";
+import { toast } from "react-toastify";
+import { useCookies } from "react-cookie";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,62 +22,80 @@ export default function EditRoomsDialog({
   setOpenEditRoomsDialog,
   retrieve,
 }) {
+  const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
 
-    const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
+  const onSubmit = (e) => {
+    e.preventDefault();
 
-    const onSubmit = (e) => {
-      e.preventDefault();
-  
-      const body = {
-        room_name: $("#room_name").val(),
-        room_type_id: roomTypeId,
-        location: $("#location").val(),
-        description: $("#description").val(),
-        capacity: $("#capacity").val(),
-      };
-
-      updateRoom(body, cookies.AUTH_TOKEN, id).then((response) => {
-        if (response?.ok) {
-          toast.success(response?.message);
-          setOpenEditRoomsDialog(false);
-          retrieve();
-        } else {
-          toast.error(response?.message);
-        }
-        console.log(body);
-      });
-
-        
-    }
-    
-    const [rowRoomTypes, setRowRoomTypes] = useState([]);
-    const [roomTypeId, setRoomTypeId] = useState("");
-
-    const getRoomTypes = () => {
-      retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
-        setRowRoomTypes(response.data);
-        console.log(response.data);
-      });
+    const body = {
+      room_name: openEditRoomsDialog?.room_name,
+      room_type_id: 1,
+      location: openEditRoomsDialog?.location,
+      description: openEditRoomsDialog?.description,
+      capacity: openEditRoomsDialog?.capacity,
     };
 
-     useEffect(() => {
-       getRoomTypes();
-     }, []);
+    updateRoom(body, cookies.AUTH_TOKEN, openEditRoomsDialog?.id).then((response) => {
+      if (response?.ok) {
+        toast.success(response?.message);
+        setOpenEditRoomsDialog(null);
+        retrieve();
+      } else {
+        toast.error(response?.message);
+      }
+      console.log("Submitting body:", body, response );
+    });
+  };
+
+  const [rowRoomTypes, setRowRoomTypes] = useState([]);
+  const [roomTypeId, setRoomTypeId] = useState("");
+
+  const getRoomTypes = () => {
+    retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
+      setRowRoomTypes(response.data);
+      console.log(response.data);
+    });
+  };
+
+  useEffect(() => {
+    getRoomTypes();
+  }, []);
 
   return (
     <>
-      <Dialog open={openEditRoomsDialog} TransitionComponent={Transition}>
-        <DialogTitle>Edit Room - Room_Name </DialogTitle>
+      <Dialog open={!!openEditRoomsDialog} TransitionComponent={Transition}>
+        <DialogTitle>Edit Room - {openEditRoomsDialog?.room_name} </DialogTitle>
         <DialogContent>
           <Box component="form" onSubmit={onSubmit}>
             <Box display={"grid"} gridTemplateColumns={"1fr 1fr"} gap={2}>
               <Box>
                 <InputLabel>Room Name</InputLabel>
-                <TextField id="room_name" variant="outlined" />
+                <TextField
+                  id="room_name"
+                  variant="outlined"
+                  value={openEditRoomsDialog?.room_name}
+                  onChange={(e) =>
+                    setOpenEditRoomsDialog({
+                      ...openEditRoomsDialog,
+                      room_name: e.target.value,
+                    })
+                  }
+                />
               </Box>
               <Box>
                 <InputLabel>Capacity</InputLabel>
-                <TextField id="capacity" variant="outlined" type="number" />
+                <TextField
+                  id="capacity"
+                  variant="outlined"
+                  type="number"
+                  value={openEditRoomsDialog?.capacity}
+                  onChange={(e) =>
+                    setOpenEditRoomsDialog({
+                      ...openEditRoomsDialog,
+                      capacity: e.target.value,
+                    })
+                  }
+                />
               </Box>
             </Box>
             <Box>
@@ -84,8 +103,15 @@ export default function EditRoomsDialog({
               <Select
                 id="room_type_id"
                 fullWidth
-                value={roomTypeId || ""}
-                onChange={(e) => setRoomTypeId(e.target.value || "")}
+                value={roomTypeId}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setRoomTypeId(value);
+                  setOpenEditRoomsDialog((prev) => ({
+                    ...prev,
+                    room_type_id: value,
+                  }));
+                }}
               >
                 {rowRoomTypes?.length > 0 ? (
                   rowRoomTypes.map((roomType) => (
@@ -100,11 +126,33 @@ export default function EditRoomsDialog({
             </Box>
             <Box>
               <InputLabel>Location</InputLabel>
-              <TextField id="location" variant="outlined" fullWidth />
+              <TextField
+                id="location"
+                variant="outlined"
+                fullWidth
+                value={openEditRoomsDialog?.location}
+                onChange={(e) =>
+                  setOpenEditRoomsDialog({
+                    ...openEditRoomsDialog,
+                    location: e.target.value,
+                  })
+                }
+              />
             </Box>
             <Box>
               <InputLabel> Description </InputLabel>
-              <TextField id="description" variant="outlined" fullWidth />
+              <TextField
+                id="description"
+                variant="outlined"
+                fullWidth
+                value={openEditRoomsDialog?.description}
+                onChange={(e) =>
+                  setOpenEditRoomsDialog({
+                    ...openEditRoomsDialog,
+                    description: e.target.value,
+                  })
+                }
+              />
             </Box>
             <Box>
               <InputLabel>Room Image</InputLabel>
@@ -123,14 +171,15 @@ export default function EditRoomsDialog({
                 position: "absolute",
                 bottom: "10px",
               }}
+              onClick={onSubmit}
             >
-              CREATE
+              UPDATE
             </Button>
           </Box>
         </DialogContent>
         <DialogActions>
           <Button
-            onClick={() => setOpenEditRoomsDialog(false)}
+            onClick={() => setOpenEditRoomsDialog(null)}
             color="error"
             variant="contained"
           >

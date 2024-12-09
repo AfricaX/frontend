@@ -21,11 +21,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function ViewRoomsDialog({
   openViewRoomsDialog,
   setOpenViewRoomsDialog,
+  rowRoomTypes,
 }) {
   return (
     <>
       <Dialog
-        open={openViewRoomsDialog}
+        open={!!openViewRoomsDialog}
         TransitionComponent={Slide}
         fullScreen
         sx={{ margin: "50px" }}
@@ -44,7 +45,7 @@ export default function ViewRoomsDialog({
                     margin: "10px",
                   }}
                 >
-                  Viewing Room - Room 332
+                  Viewing Room - {openViewRoomsDialog?.room_name}
                 </Typography>
               </Box>
 
@@ -78,21 +79,31 @@ export default function ViewRoomsDialog({
                       margin: "10px 0px 0px 10px",
                     }}
                   >
-                    Room Type Here
+                    {
+                      rowRoomTypes?.filter(
+                        (r) => r.id === openViewRoomsDialog?.room_type_id
+                      )[0]?.room_type
+                    }
                   </Typography>
                   <Typography>
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae velit numquam vel unde recusandae dicta cupiditate enim molestias quibusdam, provident id delectus atque itaque nisi laboriosam, eligendi mollitia repellat, corrupti in. Maiores molestias sed voluptatibus saepe, officia dicta sapiente fugiat ipsum id? Aliquam, accusantium doloremque facere illum blanditiis molestias vero.
+                   {openViewRoomsDialog?.description}
                   </Typography>
                 </Box>
                 <Box sx={{ marginTop: "20px" }}>
-                    <Recents />
+                  <Recents />
                 </Box>
               </Box>
             </Box>
           </Container>
         </DialogContent>
         <DialogActions>
-          <Button sx={{position: "absolute", right: "20px", top: "10px"}} onClick={() => setOpenViewRoomsDialog(false)} variant="outlined">X</Button>
+          <Button
+            sx={{ position: "absolute", right: "20px", top: "10px" }}
+            onClick={() => setOpenViewRoomsDialog(null)}
+            variant="outlined"
+          >
+            X
+          </Button>
         </DialogActions>
       </Dialog>
     </>

@@ -11,7 +11,6 @@ import { Box, Button, TextField, InputLabel } from "@mui/material";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import $ from "jquery";
-import { retrieveRoomTypes } from "../../../api/roomtype";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -20,6 +19,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function CreateRoomsDialog({
   openCreateRooms,
   setOpenCreateRooms,
+  rowRoomTypes,
   retrieve,
 }) {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
@@ -46,18 +46,7 @@ export default function CreateRoomsDialog({
     });
   };
 
-  const [rowRoomTypes, setRowRoomTypes] = useState([]);
   const [roomTypeId, setRoomTypeId] = useState("");
-  const getRoomTypes = () => {
-    retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
-      setRowRoomTypes(response.data);
-      console.log(response.data);
-    });
-  };
-
-  useEffect(() => {
-    getRoomTypes();
-  }, []);
   return (
     <>
       <Dialog open={openCreateRooms} TransitionComponent={Transition}>

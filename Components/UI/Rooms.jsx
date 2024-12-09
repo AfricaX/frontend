@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
-import { retrieveRooms } from "../../api/room";
+import { retrieveRooms, showRoom } from "../../api/room";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -20,11 +20,15 @@ import CreateRoomsDialog from "../Dialogs/Rooms CRUD/CreateRoomsDialog";
 import ViewRoomsDialog from "../Dialogs/Rooms CRUD/ViewRoomsDialog";
 import EditRoomsDialog from "../Dialogs/Rooms CRUD/EditRoomsDialog";
 import DeleteRoomsDialog from "../Dialogs/Rooms CRUD/DeleteRoomsDialog";
+import { retrieveRoomTypes } from "../../api/roomtype";
 
 export default function Rooms() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [rows, setRows] = useState([]);
 
+  /**
+   * retrieve Rooms
+   */
   const retrieve = () => {
     retrieveRooms(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
@@ -33,7 +37,20 @@ export default function Rooms() {
     });
   };
 
+  /**
+   * Retrieve Room Types
+   */
+
+  const [rowRoomTypes, setRowRoomTypes] = useState([]);
+  const getRoomTypes = () => {
+    retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
+      setRowRoomTypes(response.data);
+      console.log(response.data);
+    });
+  };
+
   useEffect(() => {
+    getRoomTypes();
     retrieve();
   }, []);
 
@@ -51,30 +68,32 @@ export default function Rooms() {
    * View Rooms Dialog
    */
 
-  const [openViewRoomsDialog, setOpenViewRoomsDialog] = useState(false);
+  const [openViewRoomsDialog, setOpenViewRoomsDialog] = useState(null);
 
-  const handleOpenViewRoomsDialog = () => {
-    setOpenViewRoomsDialog(true);
+  const handleOpenViewRoomsDialog = (row) => {
+    setOpenViewRoomsDialog(row);
+    console.log(row);
   };
 
   /**
    * Edit Rooms Dialog
    */
 
-  const [openEditRoomsDialog, setOpenEditRoomsDialog] = useState(false);
+  const [openEditRoomsDialog, setOpenEditRoomsDialog] = useState(null);
 
-  const handleOpenEditRoomsDialog = () => {
-    setOpenEditRoomsDialog(true);
+  const handleOpenEditRoomsDialog = (row) => {
+    setOpenEditRoomsDialog(row);
+    console.log(row);
   };
 
   /**
    * Delete Rooms Dialog
    */
 
-  const [openDeleteRoomsDialog, setOpenDeleteRoomsDialog] = useState(false);
+  const [openDeleteRoomsDialog, setOpenDeleteRoomsDialog] = useState(null);
 
-  const handleOpenDeleteRoomsDialog = () => {
-    setOpenDeleteRoomsDialog(true);
+  const handleOpenDeleteRoomsDialog = (row) => {
+    setOpenDeleteRoomsDialog(row);
   };
 
   return (
@@ -114,17 +133,20 @@ export default function Rooms() {
           }}
         >
           <CreateRoomsDialog
+            rowRoomTypes={rowRoomTypes}
             retrieve={retrieve}
             openCreateRooms={openCreateRooms}
             setOpenCreateRooms={setOpenCreateRooms}
           />
           <ViewRoomsDialog
+            rowRoomTypes={rowRoomTypes}
             openViewRoomsDialog={openViewRoomsDialog}
             setOpenViewRoomsDialog={setOpenViewRoomsDialog}
           />
 
           <EditRoomsDialog
             retrieve={retrieve}
+            rowRoomTypes={rowRoomTypes}
             openEditRoomsDialog={openEditRoomsDialog}
             setOpenEditRoomsDialog={setOpenEditRoomsDialog}
           />
@@ -154,7 +176,11 @@ export default function Rooms() {
                   >
                     <TableCell align="center">{row.id}</TableCell>
                     <TableCell align="center"> {row.room_name} </TableCell>
-                    <TableCell align="center"> {row.room_type_id}</TableCell>
+                    <TableCell align="center">
+                      {" "}
+                      {rowRoomTypes.filter((r) => r.id == row.room_type_id)[0]
+                        ?.room_type ?? " "}
+                    </TableCell>
                     <TableCell align="center">{row.location}</TableCell>
                     <TableCell align="center"> {row.description}</TableCell>
                     <TableCell align="center"> {row.capacity}</TableCell>
@@ -162,17 +188,17 @@ export default function Rooms() {
                       <Box display={"flex"}>
                         <VisibilityIcon
                           sx={{ flex: 1 }}
-                          onClick={handleOpenViewRoomsDialog}
+                          onClick={() => handleOpenViewRoomsDialog(row)}
                           cursor={"pointer"}
                         />{" "}
                         <EditIcon
                           sx={{ flex: 1 }}
-                          onClick={handleOpenEditRoomsDialog}
+                          onClick={() => handleOpenEditRoomsDialog(row)}
                           cursor={"pointer"}
                         />
                         <DeleteIcon
                           sx={{ flex: 1 }}
-                          onClick={handleOpenDeleteRoomsDialog}
+                          onClick={() => handleOpenDeleteRoomsDialog(row)}
                           cursor={"pointer"}
                         />
                       </Box>

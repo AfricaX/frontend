@@ -104,7 +104,7 @@ export default function Recents() {
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   >
                     <TableCell>
-                      {users.filter((u) => u.id === row.user_id)[0]?.name || ""}
+                      {users.filter((u) => u.id === row.user_id)[0]?.name ?? ""}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {row.created_at.slice(0, 10) +
@@ -115,7 +115,7 @@ export default function Recents() {
                       {rooms.filter((r) => r.id === row.room_id)[0]
                         ?.room_name || ""}
                     </TableCell>
-                    <TableCell align="right">{subject.filter((s) => s.id === row.subject_id)[0]?.subject_name|| ""}</TableCell>
+                    <TableCell align="right">{subject.filter((s) => s.id === row.subject_id)[0]?.subject_name?? ""}</TableCell>
                     <TableCell align="right">
                       {row.start_time} - {row.end_time}
                     </TableCell>

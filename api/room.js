@@ -40,7 +40,7 @@
 
  export const updateRoom = async (body, token, id) => {
    const reponse = await fetch(`${url}/rooms/${id}`, {
-     method: "POST",
+     method: "PATCH",
      headers: {
        Accept: "application/json",
        "Content-Type": "application/json",
