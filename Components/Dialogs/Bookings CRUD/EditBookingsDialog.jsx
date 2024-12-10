@@ -10,34 +10,32 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
 
-
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { MobileDatePicker } from "@mui/x-date-pickers";
-import { store } from "../../../api/booking";
-import checkAuth from "../../../hoc/checkToken";
+import { update } from "../../../api/booking";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
- function CreateBookingsDialog({
-  openCreateBookingsDialog,
-  setOpenCreateBookingsDialog,
+export default function EditBookingsDialog({
   rooms,
   subjects,
   sections,
   retrieve,
+  openEditBookingsDialog,
+  setOpenEditBookingsDialog,
 }) {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
 
-  const [startTime, setStartTime] = useState(dayjs("2022-04-17T15:30"));
-  const [endTime, setEndTime] = useState(dayjs("2022-04-17T15:30"));
-  const [bookFrom, setBookFrom] = useState(dayjs("2022-04-17"));
-  const [bookUntil, setBookUntil] = useState(dayjs("2022-04-17"));
-  
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
+  const [bookFrom, setBookFrom] = useState(null);
+  const [bookUntil, setBookUntil] = useState(null);
+
   const [roomId, setRoomId] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [sectionId, setSectionId] = useState("");
@@ -50,39 +48,36 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
     const body = {
       user_id: user?.id,
-      status: "pending",
-      room_id: roomId,
-      subject_id: subjectId,
-      section_id: sectionId,
-      day_of_week: day,
-      start_time: startTime.format("HH:mm"),
-      end_time: endTime.format("HH:mm"),
-      book_from: bookFrom.format("YYYY-MM-DD"),
-      book_until: bookUntil.format("YYYY-MM-DD"),
+      status: openEditBookingsDialog?.status,
+      room_id: openEditBookingsDialog?.room_id,
+      subject_id: openEditBookingsDialog?.subject_id,
+      section_id: openEditBookingsDialog?.section_id,
+      day_of_week: openEditBookingsDialog?.day_of_week,
+      start_time: startTime?.format("HH:mm"),
+      end_time: endTime?.format("HH:mm"),
+      book_from: bookFrom?.format("YYYY-MM-DD"),
+      book_until: bookUntil?.format("YYYY-MM-DD"),
     };
 
-    store(body, cookies.AUTH_TOKEN).then((response) =>{
-      if (response?.ok) {
-        toast.success(response?.message);
-        setOpenCreateBookingsDialog(null);
-        retrieve();
-      } else {
-        toast.error(response?.message);
+    update(body, cookies.AUTH_TOKEN, openEditBookingsDialog?.id).then(
+      (response) => {
+        if (response?.ok) {
+          toast.success(response?.message);
+          retrieve();
+          setOpenEditBookingsDialog(null);
+        } else {
+          toast.error(response?.message);
+        }
+        console.log(body, response);
       }
-      console.log(body, response);
-      
-    });
+    );
 
-    
+
   };
-
 
   return (
     <>
-      <Dialog
-        open={!!openCreateBookingsDialog}
-        TransitionComponent={Transition}
-      >
+      <Dialog open={!!openEditBookingsDialog} TransitionComponent={Transition}>
         <DialogTitle>Create New Booking</DialogTitle>
         <DialogContent>
           <Box component={"form"} sx={{ height: "400px" }}>
@@ -98,7 +93,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Room </InputLabel>
                 <Select
                   fullWidth
-                  value={roomId || ""}
+                  value={openEditBookingsDialog?.room_id || ""}
                   onChange={(e) => setRoomId(e.target.value || "")}
                 >
                   {rooms?.length > 0 ? (
@@ -116,7 +111,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Subject </InputLabel>
                 <Select
                   fullWidth
-                  value={subjectId || ""}
+                  value={openEditBookingsDialog?.subject_id || ""}
                   onChange={(e) => setSubjectId(e.target.value || "")}
                 >
                   {subjects?.length > 0 ? (
@@ -145,7 +140,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Day Of Week </InputLabel>
                 <Select
                   fullWidth
-                  value={day || ""}
+                  value={openEditBookingsDialog?.day_of_week || ""}
                   onChange={(e) => setDay(e.target.value || "")}
                 >
                   <MenuItem value="Monday"> Monday </MenuItem>
@@ -161,7 +156,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Section </InputLabel>
                 <Select
                   fullWidth
-                  value={sectionId || ""}
+                  value={openEditBookingsDialog?.section_id || ""}
                   onChange={(e) => setSectionId(e.target.value || "")}
                 >
                   {sections?.length > 0 ? (
@@ -189,7 +184,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Start Time</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileTimePicker
-                    value={startTime}
+                    value={startTime || dayjs(openEditBookingsDialog?.start_time, "HH:mm")}
                     onChange={(newValue) => setStartTime(newValue)}
                   />
                 </LocalizationProvider>
@@ -198,7 +193,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel>End Time</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileTimePicker
-                    value={endTime}
+                    value={endTime || dayjs(openEditBookingsDialog?.end_time, "HH:mm")}
                     onChange={(newValue) => setEndTime(newValue)}
                   />
                 </LocalizationProvider>
@@ -217,7 +212,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel>Book From</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileDatePicker
-                    value={bookFrom}
+                    value={bookFrom || dayjs(
+                      openEditBookingsDialog?.book_from,
+                      "YYYY-MM-DD"
+                    )}
                     onChange={(newValue) => setBookFrom(newValue)}
                   />
                 </LocalizationProvider>
@@ -226,7 +224,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel>Book Until</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileDatePicker
-                   value={bookUntil}
+                    value={ bookUntil || dayjs(
+                      openEditBookingsDialog?.book_from,
+                      "YYYY-MM-DD"
+                    )}
                     onChange={(newValue) => setBookUntil(newValue)}
                   />
                 </LocalizationProvider>
@@ -242,14 +243,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => setOpenCreateBookingsDialog(false)}
+                  onClick={() => setOpenEditBookingsDialog(false)}
                 >
                   Cancel
                 </Button>
               </Box>
               <Box>
                 <Button variant="contained" color="success" onClick={onSubmit}>
-                  Create
+                  Update
                 </Button>
               </Box>
             </Box>
@@ -259,4 +260,4 @@ const Transition = React.forwardRef(function Transition(props, ref) {
     </>
   );
 }
-export default checkAuth(CreateBookingsDialog);
+

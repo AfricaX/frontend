@@ -55,7 +55,7 @@ export default function Recents() {
 
   return (
     <>
-      <Box sx={{margin:"10px" }}>
+      <Box sx={{margin:"20px" }}>
         <Box>
           <Typography
             sx={{

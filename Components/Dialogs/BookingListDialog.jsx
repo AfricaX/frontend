@@ -5,7 +5,6 @@ import Slide from "@mui/material/Slide";
 import {
   Box,
   Button,
-  DialogActions,
   Paper,
   Table,
   TableBody,
@@ -21,10 +20,12 @@ import { indexBookings } from "../../api/booking";
 import { retrieveRooms } from "../../api/room";
 import { getUsers } from "../../api/user";
 import { getSubjects } from "../../api/subject";
-import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import CreateBookingsDialog from "./Bookings CRUD/CreateBookingsDialog";
+import { getSections } from "../../api/section";
+import EditBookingsDialog from "./Bookings CRUD/EditBookingsDialog";
+import DeleteBookingsDialog from "./Bookings CRUD/DeleteBookingsDialog";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -38,7 +39,8 @@ export default function BookingListDialog({
   const [rows, setRows] = useState([]);
   const [rooms, setRooms] = useState([]);
   const [users, setUsers] = useState([]);
-  const [subject, setSubject] = useState([]);
+  const [subjects, setSubjects] = useState([]);
+  const [sections, setSections] = useState([]);
   const retrieve = () => {
     indexBookings(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
@@ -60,7 +62,13 @@ export default function BookingListDialog({
 
     getSubjects(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
-        setSubject(response.data);
+        setSubjects(response.data);
+      }
+    });
+
+    getSections(cookies.AUTH_TOKEN).then((response) => {
+      if (response?.ok) {
+        setSections(response.data);
       }
     });
   };
@@ -68,6 +76,38 @@ export default function BookingListDialog({
   useEffect(() => {
     retrieve();
   }, []);
+
+  /**
+   * Create New Bookings
+   */
+
+  const [openCreateBookingsDialog, setOpenCreateBookingsDialog] =
+    useState(false);
+
+  const handleOpenCreateBookingsDialog = () => {
+    setOpenCreateBookingsDialog(true);
+  };
+
+  /**
+   * Edit Bookings
+   */
+
+  const [openEditBookingsDialog, setOpenEditBookingsDialog] = useState(null);
+
+  const handleOpenEditBookingsDialog = (row) => {
+    setOpenEditBookingsDialog(row);
+  };
+
+  /**
+   * Delete Bookings
+   */
+
+  const [openDeleteBookingsDialog, setOpenDeleteBookingsDialog] =
+    useState(null);
+
+  const handleOpenDeleteBookingsDialog = (row) => {
+    setOpenDeleteBookingsDialog(row);
+  };
 
   return (
     <>
@@ -112,6 +152,7 @@ export default function BookingListDialog({
                   variant="contained"
                   sx={{ margin: "10px" }}
                   color="success"
+                  onClick={handleOpenCreateBookingsDialog}
                 >
                   Create booking
                 </Button>
@@ -167,7 +208,7 @@ export default function BookingListDialog({
                               ?.room_name || ""}
                           </TableCell>
                           <TableCell align="right">
-                            {subject.filter((s) => s.id === row.subject_id)[0]
+                            {subjects.filter((s) => s.id === row.subject_id)[0]
                               ?.subject_name ?? ""}
                           </TableCell>
                           <TableCell align="right">
@@ -179,12 +220,14 @@ export default function BookingListDialog({
                             <Box display={"flex"}>
                               <EditIcon
                                 sx={{ flex: 1 }}
-                                onClick={() => handleOpenEditRoomsDialog(row)}
+                                onClick={() =>
+                                  handleOpenEditBookingsDialog(row)
+                                }
                                 cursor={"pointer"}
                               />
                               <DeleteIcon
                                 sx={{ flex: 1 }}
-                                onClick={() => handleOpenDeleteRoomsDialog(row)}
+                                onClick={() => handleOpenDeleteBookingsDialog(row)}
                                 cursor={"pointer"}
                               />
                             </Box>
@@ -196,7 +239,29 @@ export default function BookingListDialog({
               </TableContainer>
             </Box>
           </Box>
-          <CreateBookingsDialog/>
+          <CreateBookingsDialog
+            rooms={rooms}
+            sections={sections}
+            subjects={subjects}
+            retrieve={retrieve}
+            openCreateBookingsDialog={openCreateBookingsDialog}
+            setOpenCreateBookingsDialog={setOpenCreateBookingsDialog}
+          />
+
+          <EditBookingsDialog
+            rooms={rooms}
+            sections={sections}
+            subjects={subjects}
+            retrieve={retrieve}
+            openEditBookingsDialog={openEditBookingsDialog}
+            setOpenEditBookingsDialog={setOpenEditBookingsDialog}
+          />
+
+          <DeleteBookingsDialog
+            retrieve={retrieve}
+            openDeleteBookingsDialog={openDeleteBookingsDialog}
+            setOpenDeleteBookingsDialog={setOpenDeleteBookingsDialog}
+          />
         </DialogContent>
       </Dialog>
     </>

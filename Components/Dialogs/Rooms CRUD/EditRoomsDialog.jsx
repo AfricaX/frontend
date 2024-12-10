@@ -29,7 +29,7 @@ export default function EditRoomsDialog({
 
     const body = {
       room_name: openEditRoomsDialog?.room_name,
-      room_type_id: 1,
+      room_type_id: openEditRoomsDialog?.room_type_id,
       location: openEditRoomsDialog?.location,
       description: openEditRoomsDialog?.description,
       capacity: openEditRoomsDialog?.capacity,
@@ -103,10 +103,9 @@ export default function EditRoomsDialog({
               <Select
                 id="room_type_id"
                 fullWidth
-                value={roomTypeId}
+                value={openEditRoomsDialog?.room_type_id || ""}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setRoomTypeId(value);
                   setOpenEditRoomsDialog((prev) => ({
                     ...prev,
                     room_type_id: value,
