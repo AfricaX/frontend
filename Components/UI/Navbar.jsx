@@ -9,9 +9,9 @@ import { logout } from "../../redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import RoomsListDialog from "../Dialogs/RoomsListDialog";
 import BookingListDialog from "../Dialogs/BookingListDialog";
+import SectionListDialog from "../Dialogs/SectionListDialog";
 
 export default function Navbar() {
-  
   /**AUTH_TOKEN */
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const dispatch = useDispatch();
@@ -41,9 +41,19 @@ export default function Navbar() {
    */
 
   const [openBookingListDialog, setOpenBookingListDialog] = useState(false);
-  
+
   const handleBookingsClick = () => {
     setOpenBookingListDialog(true);
+  };
+
+  /**
+   * Sections Dialog
+   */
+
+  const [openSectionListDialog, setOpenSectionListDialog] = useState(false);
+
+  const handleSectionsClick = () => {
+    setOpenSectionListDialog(true);
   };
 
   return (
@@ -70,6 +80,7 @@ export default function Navbar() {
                 flex: 1,
                 fontSize: "20px",
               }}
+              onClick={handleSectionsClick}
             >
               Sections
             </Button>
@@ -132,6 +143,11 @@ export default function Navbar() {
       <BookingListDialog
         openBookingListDialog={openBookingListDialog}
         setOpenBookingListDialog={setOpenBookingListDialog}
+      />
+
+      <SectionListDialog
+        openSectionListDialog={openSectionListDialog}
+        setOpenSectionListDialog={setOpenSectionListDialog}
       />
     </>
   );
