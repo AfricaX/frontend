@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import $ from "jquery";
 import { login, register } from "../../api/auth";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 
@@ -124,9 +124,9 @@ export default function Register() {
         <Box>
           <Typography>
             Already have an account?{" "}
-            <a href="/login" style={{ color: "blue" }}>
+            <Link to="/login" style={{ color: "blue" }}>
               Login
-            </a>
+            </Link>
           </Typography>
         </Box>
       </Box>

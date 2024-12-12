@@ -3,7 +3,7 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 import { login as loginAPI } from "../../api/auth";
 import $ from "jquery";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
 import { login } from "../../redux/authSlice";
@@ -83,9 +83,9 @@ export default function Login() {
         <Box>
           <Typography>
             Don't have an account?{" "}
-            <a href="/register" style={{ color: "blue" }}>
+            <Link to="/register" style={{ color: "blue" }}>
               Sign up
-            </a>
+            </Link>
           </Typography>
         </Box>
       </Box>
