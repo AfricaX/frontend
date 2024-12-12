@@ -114,7 +114,7 @@ export default function BookingListDialog({
       <Dialog open={!!openBookingListDialog} fullScreen sx={{ margin: "50px" }}>
         <DialogContent>
           <Box sx={{ margin: "10px" }}>
-            <Box sx={{ display: "flex " }}>
+            <Box sx={{ display: "flex ", justifyContent: "space-between" }}>
               <Box>
                 <Typography
                   sx={{
@@ -128,7 +128,7 @@ export default function BookingListDialog({
                   List of Class Scheduled
                 </Typography>
               </Box>
-              <Box sx={{ position: "absolute", right: "10px", top: "10px" }}>
+              <Box>
                 <Button
                   onClick={() => setOpenBookingListDialog(false)}
                   variant="outlined"
@@ -139,7 +139,7 @@ export default function BookingListDialog({
                 </Button>
               </Box>
             </Box>
-            <Box sx={{ display: "grid ", gridTemplateColumns: "1fr 1fr" }}>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
               <Box>
                 <TextField></TextField>
                 <Button variant="contained" sx={{ margin: "10px" }}>
@@ -147,7 +147,7 @@ export default function BookingListDialog({
                 </Button>
               </Box>
 
-              <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+              <Box>
                 <Button
                   variant="contained"
                   sx={{ margin: "10px" }}
@@ -158,22 +158,24 @@ export default function BookingListDialog({
                 </Button>
               </Box>
             </Box>
+
             <Box
               sx={{
-                width: "94.5%",
-                maxHeight: "375px",
-                overflow: "auto",
-                marginRight: "20px",
+                width: "100%",
                 marginTop: "20px",
-                border: "1px solid black",
-                position: "absolute",
               }}
             >
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <TableContainer
+                component={Paper}
+                sx={{ maxHeight: "350px", overflow: "auto"  }}
+              >
+                <Table sx={{ minWidth: 650 , border: "1px solid black"}} aria-label="simple table">
                   <TableHead>
                     <TableRow sx={{ background: "lightgrey" }}>
-                      <TableCell> Created By </TableCell>
+                      <TableCell sx={{ maxWidth: "50px" }}>
+                        {" "}
+                        Created By{" "}
+                      </TableCell>
                       <TableCell> Created At </TableCell>
                       <TableCell> Room Name</TableCell>
                       <TableCell align="right">Subject</TableCell>
@@ -194,7 +196,9 @@ export default function BookingListDialog({
                             "&:last-child td, &:last-child th": { border: 0 },
                           }}
                         >
-                          <TableCell>
+                          <TableCell
+                            sx={{ maxWidth: "50px", wordWrap: "break-word" }}
+                          >
                             {users.filter((u) => u.id === row.user_id)[0]
                               ?.name ?? ""}
                           </TableCell>
@@ -227,7 +231,9 @@ export default function BookingListDialog({
                               />
                               <DeleteIcon
                                 sx={{ flex: 1 }}
-                                onClick={() => handleOpenDeleteBookingsDialog(row)}
+                                onClick={() =>
+                                  handleOpenDeleteBookingsDialog(row)
+                                }
                                 cursor={"pointer"}
                               />
                             </Box>

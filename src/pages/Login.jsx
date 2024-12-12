@@ -76,7 +76,7 @@ export default function Login() {
 
         <Box sx={{ m: "20px", width: "100%" }}>
           <Button variant="contained" fullWidth color="success" type="submit">
-            Contained
+            Log In
           </Button>
         </Box>
 

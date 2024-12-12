@@ -56,28 +56,30 @@ export default function CreateSectionsDialog({
         <DialogTitle></DialogTitle>
         <DialogContent>
           <Box component={"form"} sx={{ width: "300px" }}>
-            <Box>
-              <Typography
-                sx={{
-                  fontSize: "20px",
-                  fontWeight: "bold",
-                  color: "#2f3a8f",
-                  textAlign: "left",
-                  marginBottom: "10px",
-                }}
-              >
-                List Of Sections
-              </Typography>
-            </Box>
-            <Box sx={{ position: "absolute", top: "10px", right: "10px" }}>
-              <Button
-                variant="outlined"
-                color="error"
-                onClick={() => setOpenCreateSectionDialog(false)}
-              >
-                {" "}
-                X{" "}
-              </Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box>
+                <Typography
+                  sx={{
+                    fontSize: "20px",
+                    fontWeight: "bold",
+                    color: "#2f3a8f",
+                    textAlign: "left",
+                    marginBottom: "10px",
+                  }}
+                >
+                  List Of Sections
+                </Typography>
+              </Box>
+              <Box>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => setOpenCreateSectionDialog(false)}
+                >
+                  {" "}
+                  X{" "}
+                </Button>
+              </Box>
             </Box>
             <Box>
               <InputLabel>Section Name</InputLabel>

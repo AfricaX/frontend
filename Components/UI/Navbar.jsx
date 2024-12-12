@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import RoomsListDialog from "../Dialogs/RoomsListDialog";
 import BookingListDialog from "../Dialogs/BookingListDialog";
 import SectionListDialog from "../Dialogs/SectionListDialog";
+import ToolsListDialog from "../Dialogs/ToolsListDialog";
 
 export default function Navbar() {
   /**AUTH_TOKEN */
@@ -54,6 +55,16 @@ export default function Navbar() {
 
   const handleSectionsClick = () => {
     setOpenSectionListDialog(true);
+  };
+
+  /**
+   * Tools Dialog
+   */
+
+  const [openToolsListDialog, setOpenToolsListDialog] = useState(false);
+
+  const handleToolsClick = () => {
+    setOpenToolsListDialog(true);
   };
 
   return (
@@ -113,6 +124,7 @@ export default function Navbar() {
                 flex: 1,
                 fontSize: "20px",
               }}
+              onClick={handleToolsClick}
             >
               Tools
             </Button>
@@ -149,6 +161,11 @@ export default function Navbar() {
         openSectionListDialog={openSectionListDialog}
         setOpenSectionListDialog={setOpenSectionListDialog}
       />
+
+      <ToolsListDialog
+        openToolsListDialog={openToolsListDialog}
+        setOpenToolsListDialog={setOpenToolsListDialog}
+      />  
     </>
   );
 }

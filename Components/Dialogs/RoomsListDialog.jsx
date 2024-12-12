@@ -113,27 +113,33 @@ export default function RoomsListDialog({
         fullScreen
         sx={{ margin: "50px" }}
       >
-        <DialogTitle></DialogTitle>
         <DialogContent>
-          <Box sx={{ width: "100%", marginTop: "30px" }}>
-            <Box sx={{ margin: "10px" }}>
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    color: "#2f3a8f",
-                    textAlign: "left",
-                    margin: "10px 0px 0px 10px",
-                  }}
-                >
-                  List Of Rooms
-                </Typography>
-
+          <Box sx={{ width: "100%"}}>
+            <Box>
+              <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+                <Box>
+                  <Typography
+                    sx={{
+                      fontSize: "20px",
+                      fontWeight: "bold",
+                      color: "#2f3a8f",
+                      textAlign: "left",
+                      margin: "10px 0px 0px 10px",
+                    }}
+                  >
+                    List Of Rooms
+                  </Typography>
+                </Box>
+                <Box>
+                  <Button variant="outlined" color="error" onClick={() => setOpenRoomsListDialog(false)}>
+                    X
+                  </Button>
+                </Box>
+              </Box>
+              <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
                 <Button
                   variant="contained"
                   color="success"
-                  sx={{ position: "absolute", right: "40px", top: "65px" }}
                   onClick={handleOpenCreateRooms}
                 >
                   Create Room
@@ -237,15 +243,6 @@ export default function RoomsListDialog({
                 </TableContainer>
               </Box>
             </Box>
-          </Box>
-          <Box sx={{ position: "absolute", top: "10px", right: "10px" }}>
-            <Button
-              onClick={() => setOpenRoomsListDialog(false)}
-              variant="outlined"
-              color="error"
-            >
-              X
-            </Button>
           </Box>
         </DialogContent>
       </Dialog>

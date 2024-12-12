@@ -162,29 +162,30 @@ export default function EditRoomsDialog({
                 fullWidth
               ></TextField>
             </Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              sx={{
-                position: "absolute",
-                bottom: "10px",
-              }}
-              onClick={onSubmit}
-            >
-              UPDATE
-            </Button>
+            <Box sx={{ display: "flex", justifyContent: "space-between" , marginTop: "1rem"}}>
+              <Box>
+                <Button
+                  onClick={() => setOpenEditRoomsDialog(null)}
+                  color="error"
+                  variant="contained"
+                >
+                  Cancel
+                </Button>
+              </Box>
+              <Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                  onClick={onSubmit}
+                >
+                  UPDATE
+                </Button>
+              </Box>
+            </Box>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setOpenEditRoomsDialog(null)}
-            color="error"
-            variant="contained"
-          >
-            Cancel
-          </Button>
-        </DialogActions>
+        <DialogActions></DialogActions>
       </Dialog>
     </>
   );

@@ -11,3 +11,16 @@ export const retrieveRoomTypes = async (token) => {
     });
     return await reponse.json();
 }
+
+export const storeRoomType = async (body, token) => {
+    const reponse = await fetch(`${url}/roomTypes/`, {
+        method: "POST",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+    });
+    return await reponse.json();
+}

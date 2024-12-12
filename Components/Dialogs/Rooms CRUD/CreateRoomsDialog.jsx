@@ -99,28 +99,30 @@ export default function CreateRoomsDialog({
                 fullWidth
               ></TextField>
             </Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="success"
-              sx={{
-                position: "absolute",
-                bottom: "10px",
-              }}
-            >
-              CREATE
-            </Button>
+
+            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+              <Box mt={2}>
+                <Button
+                  onClick={() => setOpenCreateRooms(false)}
+                  color="error"
+                  variant="contained"
+                >
+                  Cancel
+                </Button>
+              </Box>
+              <Box mt={2}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="success"
+                >
+                  CREATE
+                </Button>
+              </Box>
+            </Box>
           </Box>
         </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => setOpenCreateRooms(false)}
-            color="error"
-            variant="contained"
-          >
-            Cancel
-          </Button>
-        </DialogActions>
+        <DialogActions></DialogActions>
       </Dialog>
     </>
   );
