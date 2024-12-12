@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import Navbar from "../../Components/UI/Navbar";
 import Recents from "../../Components/UI/Recents";
 import Login from "./Login";
-import MyCalendar from "../../Components/UI/myCalendar";
+import MyCalendar from "../../Components/UI/MyCalendar";
 import { Box } from "@mui/material";
 
 function Home() {
