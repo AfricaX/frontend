@@ -38,7 +38,15 @@ export default function Register() {
     });
   };
   return (
-    <Container>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
       <Box
         component="form"
         sx={{
@@ -46,8 +54,8 @@ export default function Register() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          height: "100vh",
-          width: "50vh",
+          width: { xs: "90vw", sm: "70vw", md: "50vw", lg: "30vw" },
+          maxWidth: "400px",
           border: "1px solid black",
           borderRadius: "10px",
           padding: "50px",

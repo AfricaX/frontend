@@ -1,6 +1,6 @@
 import { AppBar } from "@mui/material";
 import React, { useState } from "react";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button } from "@mui/material";
 import { logout as logoutAPI } from "../../api/auth";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
@@ -17,6 +17,7 @@ export default function Navbar() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const onSubmit = (e) => {
     logoutAPI(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {

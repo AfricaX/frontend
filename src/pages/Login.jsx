@@ -32,7 +32,15 @@ export default function Login() {
     });
   };
   return (
-    <Container>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        padding: "20px",
+      }}
+    >
       <Box
         component="form"
         sx={{
@@ -40,13 +48,13 @@ export default function Login() {
           flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
-          width: "50vh",
+          width: { xs: "90vw", sm: "70vw", md: "50vw", lg: "30vw" },
+          maxWidth: "400px",
           border: "1px solid black",
           borderRadius: "10px",
-          padding: "50px",
+          padding: "30px",
           boxShadow: "5px 5px 5px #aaaaaa",
           backgroundColor: "white",
-          height: "450px",
         }}
         onSubmit={onSubmit}
       >

@@ -1,1 +1,1 @@
-export const url = "https://roommanagementsystems-production.up.railway.app/api";
+export const url = "http://localhost:8000/api";
