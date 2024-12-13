@@ -56,7 +56,9 @@ export default function Recents() {
 
   return (
     <>
-      <Box sx={{margin:"20px" }}>
+      <Box  sx={{
+            width: "100%",       
+          }}>
         <Box>
           <Typography
             sx={{
@@ -72,13 +74,11 @@ export default function Recents() {
         </Box>
         <Box
           sx={{
-            width: "60%",
+            width: "100%",
             maxHeight: "375px",
             overflow: "auto",
-            marginRight: "20px",
-            marginTop: "20px",
             border: "1px solid black",
-            position: "absolute",
+        
           }}
         >
           <TableContainer component={Paper}>

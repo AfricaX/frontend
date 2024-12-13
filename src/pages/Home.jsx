@@ -16,9 +16,21 @@ function Home() {
       {user ? (
         <>
           <Navbar />
-          <Box sx={{ display: "grid", gridTemplateColumns: "2fr 1fr" }}>
-            <Recents />
-            <MyCalendar />
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              justifyContent: "space-between",
+              alignItems: "center",
+              gap: "16px",
+            }}
+          >
+            <Box>
+              <Recents />
+            </Box>
+            <Box>
+              <MyCalendar />
+            </Box>
           </Box>
         </>
       ) : (

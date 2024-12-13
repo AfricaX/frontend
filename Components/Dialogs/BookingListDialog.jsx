@@ -167,9 +167,13 @@ export default function BookingListDialog({
             >
               <TableContainer
                 component={Paper}
-                sx={{ maxHeight: "350px", overflow: "auto"  }}
+                sx={{
+                  maxHeight: "350px",
+                  overflow: "auto",
+                  border: "1px solid black",
+                }}
               >
-                <Table sx={{ minWidth: 650 , border: "1px solid black"}} aria-label="simple table">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
                   <TableHead>
                     <TableRow sx={{ background: "lightgrey" }}>
                       <TableCell sx={{ maxWidth: "50px" }}>

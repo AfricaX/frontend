@@ -114,7 +114,7 @@ export default function RoomsListDialog({
         sx={{ margin: "50px" }}
       >
         <DialogContent>
-          <Box sx={{ width: "100%"}}>
+          <Box sx={{ width: "100%" }}>
             <Box>
               <Box sx={{ display: "flex", justifyContent: "space-between" }}>
                 <Box>
@@ -131,12 +131,22 @@ export default function RoomsListDialog({
                   </Typography>
                 </Box>
                 <Box>
-                  <Button variant="outlined" color="error" onClick={() => setOpenRoomsListDialog(false)}>
+                  <Button
+                    variant="outlined"
+                    color="error"
+                    onClick={() => setOpenRoomsListDialog(false)}
+                  >
                     X
                   </Button>
                 </Box>
               </Box>
-              <Box sx={{ display: "flex", justifyContent: "flex-end", marginTop: "10px" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "10px",
+                }}
+              >
                 <Button
                   variant="contained"
                   color="success"
@@ -147,13 +157,11 @@ export default function RoomsListDialog({
               </Box>
               <Box
                 sx={{
-                  width: "95%",
+                  width: "100%",
                   maxHeight: "400px",
                   overflow: "auto",
-                  marginRight: "20px",
-                  marginTop: "20px",
+                  marginTop: "10px",
                   border: "1px solid black",
-                  position: "absolute",
                 }}
               >
                 <CreateRoomsDialog
@@ -220,16 +228,19 @@ export default function RoomsListDialog({
                           <TableCell align="center">
                             <Box display={"flex"}>
                               <VisibilityIcon
+                                aria-label="View Room"
                                 sx={{ flex: 1 }}
                                 onClick={() => handleOpenViewRoomsDialog(row)}
                                 cursor={"pointer"}
                               />{" "}
                               <EditIcon
+                                aria-label="Edit Room"
                                 sx={{ flex: 1 }}
                                 onClick={() => handleOpenEditRoomsDialog(row)}
                                 cursor={"pointer"}
                               />
                               <DeleteIcon
+                                aria-label="Delete Room"
                                 sx={{ flex: 1 }}
                                 onClick={() => handleOpenDeleteRoomsDialog(row)}
                                 cursor={"pointer"}
