@@ -20,12 +20,10 @@ function Home() {
             sx={{
               display: "flex",
               flexDirection: { xs: "column", md: "row" },
-              justifyContent: "space-between",
               alignItems: "center",
-              gap: "16px",
             }}
           >
-            <Box>
+            <Box sx={{ width: "95%"}}>
               <Recents />
             </Box>
             <Box>

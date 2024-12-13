@@ -82,7 +82,6 @@ export default function RoomsListDialog({
 
   const handleOpenViewRoomsDialog = (row) => {
     setOpenViewRoomsDialog(row);
-    console.log(row);
   };
 
   /**
@@ -93,7 +92,6 @@ export default function RoomsListDialog({
 
   const handleOpenEditRoomsDialog = (row) => {
     setOpenEditRoomsDialog(row);
-    console.log(row);
   };
 
   /**

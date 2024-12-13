@@ -105,13 +105,12 @@ export default function SectionListDialog({
               </Box>
               <Box
                 sx={{
-                  width: "95%",
+                  width: "100%",
                   maxHeight: "400px",
                   overflow: "auto",
                   marginRight: "20px",
                   marginTop: "20px",
                   border: "1px solid black",
-                  position: "absolute",
                 }}
               >
                 <TableContainer component={Paper}>
