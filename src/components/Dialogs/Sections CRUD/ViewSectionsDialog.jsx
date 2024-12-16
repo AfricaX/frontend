@@ -67,7 +67,6 @@ export default function ({
         setSections(response.data);
       }
     });
-
   };
 
   useEffect(() => {
@@ -76,118 +75,102 @@ export default function ({
 
   return (
     <>
-      <Dialog
-        fullScreen
-        sx={{ margin: "50px" }}
-        open={!!openViewSectionsDialog}
-        TransitionComponent={Transition}
+      <div
+        className={`${
+          openViewSectionsDialog ? "block" : "hidden"
+        } fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center`}
       >
-        <DialogTitle></DialogTitle>
-        <DialogContent>
-          <Box sx={{ margin: "10px" }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box>
-                <Typography
-                  sx={{
-                    fontSize: "20px",
-                    fontWeight: "bold",
-                    color: "#2f3a8f",
-                    textAlign: "left",
-                    margin: "10px",
-                  }}
-                >
-                  Viewing Scheduled Classes For{" "}
-                  {openViewSectionsDialog?.section_name}
-                </Typography>
-              </Box>
-
-              <Box>
-                <Button
-                  variant="outlined"
-                  color="error"
-                  onClick={() => setOpenViewSectionsDialog(null)}
-                >
-                  {" "}
-                  X{" "}
-                </Button>
-              </Box>
-            </Box>
-
-            <Box
-              sx={{
-                width: "100%",
-                height: "100%",
-              }}
+        <div className="w-full max-w-5xl bg-white p-6 rounded-md shadow-lg mt-20">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-[1rem] sm:text-2xl font-bold text-[#2f3a8f]">
+              Viewing Scheduled Classes For{" "}
+              {openViewSectionsDialog?.section_name}
+            </h2>
+            <button
+              className="border-2 border-red-500 text-red-500 text-2xl sm:text-xl px-3 py-1 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
+              onClick={() => setOpenViewSectionsDialog(null)}
             >
-              <TableContainer component={Paper}>
-                <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                  <TableHead>
-                    <TableRow sx={{ background: "lightgrey" }}>
-                      <TableCell sx={{ maxWidth: "50px" }}>
-                        {" "}
-                        Created By{" "}
-                      </TableCell>
-                      <TableCell> Created At </TableCell>
-                      <TableCell> Room Name</TableCell>
-                      <TableCell align="right">Subject</TableCell>
-                      <TableCell align="right"> Sections</TableCell>
-                      <TableCell align="right">Time</TableCell>
-                      <TableCell align="right">Days Of Week</TableCell>
-                      <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {rows
-                      .filter(
-                        (row) =>
-                          sections.find((s) => s.id === row.section_id)
-                            ?.section_name ===
-                          openViewSectionsDialog?.section_name
-                      )
-                      .slice()
-                      .reverse()
-                      .map((row) => (
-                        <TableRow
-                          key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell sx={{ maxWidth: "50px" , wordWrap: "break-word"}}>
-                            {users.find((u) => u.id === row.user_id)?.name ??
-                              ""}
-                          </TableCell>
-                          <TableCell component="th" scope="row">
-                            {row.created_at.slice(0, 10) +
-                              " " +
-                              row.created_at.slice(11, 16)}
-                          </TableCell>
-                          <TableCell>
-                            {rooms.find((r) => r.id === row.room_id)
-                              ?.room_name || ""}
-                          </TableCell>
-                          <TableCell align="right">
-                            {subject.find((s) => s.id === row.subject_id)
-                              ?.subject_name ?? ""}
-                          </TableCell>
-                          <TableCell align="right">
-                            {sections.find((s) => s.id === row.section_id)
-                              ?.section_name ?? ""}
-                          </TableCell>
-                          <TableCell align="right">
-                            {row.start_time} - {row.end_time}
-                          </TableCell>
-                          <TableCell align="right">{row.day_of_week}</TableCell>
-                          <TableCell align="right">{row.status}</TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-            </Box>
-          </Box>
-        </DialogContent>
-      </Dialog>
+              X
+            </button>
+          </div>
+
+          <div className="overflow-x-auto max-h-[40vh] m-2">
+            <table className="min-w-full table-auto border-collapse">
+              <thead>
+                <tr className="bg-gray-200">
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Created By
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Created At
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Room Name
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Subject
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Sections
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Time
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Days Of Week
+                  </th>
+                  <th className="text-center text-[7px] border border-black p-0 sm:text-base">
+                    Status
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows
+                  .filter(
+                    (row) =>
+                      sections.find((s) => s.id === row.section_id)
+                        ?.section_name === openViewSectionsDialog?.section_name
+                  )
+                  .slice()
+                  .reverse()
+                  .map((row) => (
+                    <tr key={row.id} className="hover:bg-gray-100">
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {users.find((u) => u.id === row.user_id)?.name ?? ""}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {row.created_at.slice(0, 10) +
+                          " " +
+                          row.created_at.slice(11, 16)}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {rooms.find((r) => r.id === row.room_id)?.room_name ||
+                          ""}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {subject.find((s) => s.id === row.subject_id)
+                          ?.subject_name ?? ""}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {sections.find((s) => s.id === row.section_id)
+                          ?.section_name ?? ""}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {row.start_time} - {row.end_time}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {row.day_of_week}
+                      </td>
+                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                        {row.status}
+                      </td>
+                    </tr>
+                  ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </>
   );
 }

@@ -83,13 +83,13 @@ export default function BookingListDialog({
           openBookingListDialog ? "block" : "hidden"
         } fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center`}
       >
-        <div className="w-full max-w-5xl bg-white p-6 rounded-md shadow-lg">
+        <div className="w-full  max-w-5xl bg-white p-6 rounded-md shadow-lg mt-20">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-[8px] sm:text-2xl font-bold text-[#2f3a8f]">
+            <h2 className="text-[1rem] sm:text-2xl font-bold text-[#2f3a8f]">
               List of Class Scheduled
             </h2>
             <button
-              className="text-red-500 text-2xl sm:text-xl"
+              className="border-2 border-red-500 text-red-500 text-2xl sm:text-xl px-3 py-1 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
               onClick={() => setOpenBookingListDialog(false)}
             >
               X
@@ -115,7 +115,7 @@ export default function BookingListDialog({
             </button>
           </div>
 
-          <div className="overflow-x-auto mt-4">
+          <div className="overflow-x-auto mt-4 max-h-[50vh]">
             <table className="min-w-full table-auto border-collapse text-[8px] lg:text-[15px]">
               <thead>
                 <tr className="bg-gray-100">

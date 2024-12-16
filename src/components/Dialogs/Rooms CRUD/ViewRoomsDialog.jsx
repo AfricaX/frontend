@@ -58,29 +58,29 @@ export default function ViewRoomsDialog({
     <>
       {openViewRoomsDialog && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
-          <div className="bg-white rounded-lg w-full max-w-4xl overflow-y-auto">
-            <div className="flex justify-between items-center mb-4">
+          <div className="bg-white rounded-lg w-full max-w-4xl overflow-y-auto max-h-[90vh]">
+            <div className="flex justify-between items-center m-4">
               <h2 className="text-2xl font-bold text-blue-700 text-xs sm:text-base">
-                Viewing Room - {openViewRoomsDialog?.image}
+                Viewing Room - {openViewRoomsDialog?.room_name}
               </h2>
               <button
                 onClick={() => setOpenViewRoomsDialog(null)}
-                className="bg-red-500 text-white px-4 py-2 rounded"
+                className="border-2 border-red-500 text-red-500 text-2xl sm:text-xl px-3 py-1 rounded-md hover:bg-red-500 hover:text-white transition duration-300"
               >
-                Close
+                X
               </button>
             </div>
 
             <div className="flex flex-col md:flex-row gap-6 mb-4">
-              <div className="w-full md:w-1/2 border border-gray-300">
+              <div className="w-full md:w-1/2 border border-gray-300 m-0 md:m-5">
                 <img
                   src={openViewRoomsDialog?.image}
                   alt={openViewRoomsDialog?.image}
-                  className="w-full h-80 object-contain"
+                  className="w-full h-60 object-contain"
                 />
               </div>
 
-              <div className="flex-1 text-xs sm:text-base">
+              <div className="flex-1 text-xs sm:text-base m-5">
                 <h3 className="font-semibold text-blue-700">
                   {
                     rowRoomTypes?.find(
@@ -92,7 +92,7 @@ export default function ViewRoomsDialog({
               </div>
             </div>
 
-            <div className="overflow-x-auto">
+            <div className="overflow-x-auto max-h-[40vh] m-2">
               <table className="min-w-full table-auto border-collapse">
                 <thead>
                   <tr className="bg-gray-200">
