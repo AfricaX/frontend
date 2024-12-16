@@ -1,7 +1,8 @@
 import { useCookies } from "react-cookie";
 import { useDispatch, useSelector } from "react-redux";
-import { checkToken } from "../api/auth";
+
 import { login } from "../redux/authSlice";
+import { checkToken } from "../api/auth";
 
 const checkAuth = (WrappedComponent) => {
   const Authenticated = (props) => {

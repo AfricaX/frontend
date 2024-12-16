@@ -1,101 +1,101 @@
-import React from "react";
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
-import { login as loginAPI } from "../../api/auth";
-import $ from "jquery";
-import { toast } from "react-toastify";
+import React, { useState } from "react";
+import { Box, Typography, TextField, Button, Container } from "@mui/material";
 import { Link, useNavigate } from "react-router-dom";
+import $ from "jquery";
+import { login as loginAPI } from "../api/auth";
 import { useCookies } from "react-cookie";
 import { useDispatch } from "react-redux";
-import { login } from "../../redux/authSlice";
+import { login } from "../redux/authSlice";
+import { toast } from "react-toastify";
 
 export default function Login() {
-  const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [cookies, setCookie, removeCookie] = useCookies();
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
+  const [warnings, setWarnings] = useState({});
   const onSubmit = (e) => {
     e.preventDefault();
-
-    const body = {
+    loginAPI({
       email: $("#email").val(),
       password: $("#password").val(),
-    };
-    loginAPI(body).then((response) => {
-      if (response?.ok) {
-        toast.success(response?.message);
+    }).then((res) => {
+      if (res?.ok) {
+        setCookie("AUTH_TOKEN", res.data.token);
+        dispatch(login(res.data));
         navigate("/");
-        setCookie("AUTH_TOKEN", response.data.token);
-        dispatch(login(response.data));
+        setWarnings({});
+        toast.success(res?.message ?? "Logged in successfully!");
       } else {
-        toast.error(response?.message);
+        toast.error(res?.message ?? "Something Went Wrong!");
+        setWarnings({ errors: res?.errors });
       }
     });
   };
   return (
-    <Container
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        minHeight: "100vh",
-        padding: "20px",
-      }}
-    >
-      <Box
-        component="form"
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          width: { xs: "90vw", sm: "70vw", md: "50vw", lg: "30vw" },
-          maxWidth: "400px",
-          border: "1px solid black",
-          borderRadius: "10px",
-          padding: "30px",
-          boxShadow: "5px 5px 5px #aaaaaa",
-          backgroundColor: "white",
-        }}
-        onSubmit={onSubmit}
-      >
-        <Typography variant="h4">Log In</Typography>
-
-        <Box sx={{ m: "10px", width: "100%" }}>
-          <TextField
-            id="email"
-            label="Email"
-            variant="standard"
-            fullWidth
-            required
-            type="email"
-          />
+    <Container className=" min-h-screen flex justify-center items-center">
+      <Box className="shadow shadow-black rounded-xl p-4 ">
+        <Typography className="text-center" variant="h4">
+          Login
+        </Typography>
+        <Box className="grid mt-4 md:grid-cols-2">
+          <Box className="m-2 ">
+            <img
+              src="https://www.mfi.org.ph/wp-content/uploads/2020/04/mfi-logo.png"
+              alt="logo of MFI"
+              className="w-32 block m-auto "
+            />
+          </Box>
+          <Box
+            component="form"
+            className="flex justify-center items-center h-4/5 flex-col"
+            onSubmit={onSubmit}
+          >
+            <Box className="mb-2 mt-2 w-full">
+              <TextField
+                type="Email"
+                placeholder="Email"
+                label="Email"
+                required
+                fullWidth
+                size="small"
+                id="email"
+              />
+            </Box>
+            <Box className="mb-2 mt-2 w-full">
+              <TextField
+                type="password"
+                placeholder="Password"
+                label="Password"
+                required
+                fullWidth
+                size="small"
+                id="password"
+              />
+              {warnings?.errors ? (
+                <Typography className="text-red-600 text-center">
+                  {warnings?.errors}
+                </Typography>
+              ) : null}
+            </Box>
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              className="block m-auto"
+            >
+              Login
+            </Button>
+          </Box>
         </Box>
-
-        <Box sx={{ m: "10px", width: "100%" }}>
-          <TextField
-            id="password"
-            label="Password"
-            variant="standard"
-            fullWidth
-            type="password"
-            required
-          />
-        </Box>
-
-        <Box sx={{ m: "20px", width: "100%" }}>
-          <Button variant="contained" fullWidth color="success" type="submit">
-            Log In
-          </Button>
-        </Box>
-
-        <Box>
-          <Typography>
-            Don't have an account?{" "}
-            <Link to="/register" style={{ color: "blue" }}>
-              Sign up
-            </Link>
-          </Typography>
-        </Box>
+        <Link
+          className="flex justify-center gap-2 items-center flex-wrap"
+          to="/register"
+        >
+          Don't you have an account yet?{" "}
+          <Typography className="text-blue-600">Sign up</Typography>
+        </Link>
       </Box>
     </Container>
   );

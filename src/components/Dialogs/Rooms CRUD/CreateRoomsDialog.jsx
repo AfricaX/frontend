@@ -26,15 +26,16 @@ export default function CreateRoomsDialog({
   const onSubmit = (e) => {
     e.preventDefault();
 
-    const body = {
-      room_name: $("#room_name").val(),
-      room_type_id: roomTypeId,
-      location: $("#location").val(),
-      description: $("#description").val(),
-      capacity: $("#capacity").val(),
-    };
+    const body = new FormData();
+    body.append("room_name", $("#room_name").val());
+    body.append("capacity", $("#capacity").val());
+    body.append("room_type_id", roomTypeId);
+    body.append("location", $("#location").val());
+    body.append("description", $("#description").val());
+    body.append("image", $("#image").get(0).files[0]);
 
     storeRoom(body, cookies.AUTH_TOKEN).then((response) => {
+      console.log(response);
       if (response?.ok) {
         toast.success(response?.message);
         setOpenCreateRooms(false);
@@ -42,8 +43,10 @@ export default function CreateRoomsDialog({
       } else {
         toast.error(response?.message);
       }
-      console.log(body);
+      console.log(response);
     });
+
+ 
   };
 
   const [roomTypeId, setRoomTypeId] = useState("");
@@ -111,11 +114,7 @@ export default function CreateRoomsDialog({
                 </Button>
               </Box>
               <Box mt={2}>
-                <Button
-                  type="submit"
-                  variant="contained"
-                  color="success"
-                >
+                <Button type="submit" variant="contained" color="success">
                   CREATE
                 </Button>
               </Box>

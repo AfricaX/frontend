@@ -106,7 +106,7 @@ export default function Navbar() {
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-           flexDirection:"row" ,
+            flexDirection: "row",
           }}
         >
           <Box sx={{ width: isMobile ? "100px" : "100px" }}>

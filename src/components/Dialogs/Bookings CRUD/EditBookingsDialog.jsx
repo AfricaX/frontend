@@ -61,6 +61,7 @@ export default function EditBookingsDialog({
 
     update(body, cookies.AUTH_TOKEN, openEditBookingsDialog?.id).then(
       (response) => {
+        console.log(response);
         if (response?.ok) {
           toast.success(response?.message);
           retrieve();
@@ -71,8 +72,6 @@ export default function EditBookingsDialog({
         console.log(body, response);
       }
     );
-
-
   };
 
   return (
@@ -184,7 +183,10 @@ export default function EditBookingsDialog({
                 <InputLabel> Start Time</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileTimePicker
-                    value={startTime || dayjs(openEditBookingsDialog?.start_time, "HH:mm")}
+                    value={
+                      startTime ||
+                      dayjs(openEditBookingsDialog?.start_time, "HH:mm")
+                    }
                     onChange={(newValue) => setStartTime(newValue)}
                   />
                 </LocalizationProvider>
@@ -193,7 +195,10 @@ export default function EditBookingsDialog({
                 <InputLabel>End Time</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileTimePicker
-                    value={endTime || dayjs(openEditBookingsDialog?.end_time, "HH:mm")}
+                    value={
+                      endTime ||
+                      dayjs(openEditBookingsDialog?.end_time, "HH:mm")
+                    }
                     onChange={(newValue) => setEndTime(newValue)}
                   />
                 </LocalizationProvider>
@@ -212,10 +217,10 @@ export default function EditBookingsDialog({
                 <InputLabel>Book From</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileDatePicker
-                    value={bookFrom || dayjs(
-                      openEditBookingsDialog?.book_from,
-                      "YYYY-MM-DD"
-                    )}
+                    value={
+                      bookFrom ||
+                      dayjs(openEditBookingsDialog?.book_from, "YYYY-MM-DD")
+                    }
                     onChange={(newValue) => setBookFrom(newValue)}
                   />
                 </LocalizationProvider>
@@ -224,10 +229,10 @@ export default function EditBookingsDialog({
                 <InputLabel>Book Until</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileDatePicker
-                    value={ bookUntil || dayjs(
-                      openEditBookingsDialog?.book_from,
-                      "YYYY-MM-DD"
-                    )}
+                    value={
+                      bookUntil ||
+                      dayjs(openEditBookingsDialog?.book_from, "YYYY-MM-DD")
+                    }
                     onChange={(newValue) => setBookUntil(newValue)}
                   />
                 </LocalizationProvider>
@@ -260,4 +265,3 @@ export default function EditBookingsDialog({
     </>
   );
 }
-

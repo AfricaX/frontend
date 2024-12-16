@@ -13,14 +13,14 @@ export default function MyCalendar() {
     setOpen(true);
   };
   return (
-    <>
-      <Container sx={{ marginTop: "50px" }}>
-        <Calendar onClickDay={handleClick}  />
+    <Container className="flex justify-center align-center ">
+      <Box>
+        <Calendar onClickDay={handleClick} />
 
-        <Box sx={{ textAlign: "left", color: "grey", marginLeft: "20px" }}>
+        <Box className="tex-left text-gray-300 ml-10">
           Note: Click on a day to view classes
         </Box>
-      </Container>
+      </Box>
 
       <CalendarDialogs
         open={open}
@@ -28,6 +28,6 @@ export default function MyCalendar() {
         handleClick={handleClick}
         date={date}
       />
-    </>
+    </Container>
   );
 }

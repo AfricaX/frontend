@@ -14,12 +14,12 @@ const authSlice = createSlice({
     logout: (state) => {
       state.user = null;
     },
-    update: (state, action) =>{
-        state.user = {
+    update: (state, action) => {
+      state.user = {
         ...state.user,
-        ...action.payload
-        }
-    }
+        ...action.payload,
+      };
+    },
   },
 });
 

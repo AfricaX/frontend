@@ -1,12 +1,10 @@
-import { useState } from "react";
 import "./App.css";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { store } from "../redux/store";
-import { Provider } from "react-redux";
+import Home from "./pages/Home";
 import Login from "./pages/Login";
-
+import Register from "./pages/Register";
+import { store } from "./redux/store";
+import { Provider } from "react-redux";
 function App() {
   const router = createBrowserRouter([
     {
@@ -14,21 +12,19 @@ function App() {
       element: <Home />,
     },
     {
-      path: "/register",
-      element: <Register />,
-    },
-    {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/register",
+      element: <Register />,
     },
   ]);
 
   return (
-    <>
-      <Provider  store={store} >
-        <RouterProvider router={router} />
-      </Provider>
-    </>
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   );
 }
 
