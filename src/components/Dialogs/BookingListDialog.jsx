@@ -76,6 +76,35 @@ export default function BookingListDialog({
     setOpenDeleteBookingsDialog(row);
   };
 
+  /**
+   * Date Formatter
+   */
+
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+
+    const formattedDate = date.toISOString().split("T")[0];
+    const formattedTime = date.toLocaleTimeString([], options);
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  /**
+   * Time Formatter
+   */
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12; // Convert 0 and 12 to 12
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+
   return (
     <>
       <div
@@ -108,10 +137,9 @@ export default function BookingListDialog({
               </button>
             </div>
             <button
-              className="px-4 py-2 bg-green-500 text-white rounded-md text-[8px] sm:text-base"
+              className="px-5 py-2 rounded-lg bg-green-500 text-white font-medium md text-[10px] sm:text-base shadow-md hover:bg-green-600 hover:shadow-lg transform transition-all duration-200 "
               onClick={handleOpenCreateBookingsDialog}
-            >
-              Create booking
+            > + Create booking
             </button>
           </div>
 
@@ -156,9 +184,7 @@ export default function BookingListDialog({
                           ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
-                        {row.created_at.slice(0, 10) +
-                          " " +
-                          row.created_at.slice(11, 16)}
+                        {formatDateTime(row.created_at)}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
                         {rooms.filter((r) => r.id === row.room_id)[0]
@@ -169,8 +195,10 @@ export default function BookingListDialog({
                           ?.subject_name ?? ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
-                        {row.start_time} - {row.end_time}
+                        {formatTime(row.start_time)} -{" "}
+                        {formatTime(row.end_time)}
                       </td>
+
                       <td className="border border-grey text-[8px] sm:text-base text-center">
                         {row.day_of_week}
                       </td>

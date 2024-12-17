@@ -42,6 +42,35 @@ export default function Recents() {
     retrieve();
   }, []);
 
+  /**
+   * Date Formatter
+   */
+
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+
+    const formattedDate = date.toISOString().split("T")[0];
+    const formattedTime = date.toLocaleTimeString([], options);
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  /**
+   * Time Formatter
+   */
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12; // Convert 0 and 12 to 12
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
+
   return (
     <div className="flex justify-center align-center ">
       <div className="overflow-x-auto">
@@ -77,9 +106,7 @@ export default function Recents() {
                       {users.find((u) => u.id === row.user_id)?.name ?? ""}
                     </td>
                     <td className="border border-black p-1">
-                      {row.created_at.slice(0, 10) +
-                        " " +
-                        row.created_at.slice(11, 16)}
+                      {formatDateTime(row.created_at)}
                     </td>
                     <td className="border border-black p-1">
                       {rooms.find((r) => r.id === row.room_id)?.room_name || ""}
@@ -89,7 +116,7 @@ export default function Recents() {
                         ?.subject_name ?? ""}
                     </td>
                     <td className="border border-black p-1 text-center">
-                      {row.start_time} - {row.end_time}
+                      {formatTime(row.start_time)} - {formatTime(row.end_time)}
                     </td>
                     <td className="border border-black p-1 text-center">
                       {row.day_of_week}
