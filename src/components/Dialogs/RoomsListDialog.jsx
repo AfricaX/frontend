@@ -98,7 +98,7 @@ export default function RoomsListDialog({
         TransitionComponent={Transition}
         fullScreen
         sx={{
-          margin: "5px",
+          margin: "50px",
           "& .MuiDialogContent-root": {
             padding: "0",
           },

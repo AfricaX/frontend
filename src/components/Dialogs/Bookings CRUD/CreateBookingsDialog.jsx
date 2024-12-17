@@ -10,7 +10,6 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import { useSelector } from "react-redux";
 
-
 import dayjs from "dayjs";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -18,12 +17,13 @@ import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import { store } from "../../../api/booking";
 import checkAuth from "../../../hoc/checkToken";
+import { Today } from "@mui/icons-material";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
- function CreateBookingsDialog({
+function CreateBookingsDialog({
   openCreateBookingsDialog,
   setOpenCreateBookingsDialog,
   rooms,
@@ -32,16 +32,17 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   retrieve,
 }) {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
+  const today = dayjs();
 
-  const [startTime, setStartTime] = useState(dayjs("2022-04-17T15:30"));
-  const [endTime, setEndTime] = useState(dayjs("2022-04-17T15:30"));
-  const [bookFrom, setBookFrom] = useState(dayjs("2022-04-17"));
-  const [bookUntil, setBookUntil] = useState(dayjs("2022-04-17"));
-  
+  const [startTime, setStartTime] = useState(dayjs(today));
+  const [endTime, setEndTime] = useState(dayjs(today));
+  const [bookFrom, setBookFrom] = useState(dayjs(today));
+  const [bookUntil, setBookUntil] = useState(dayjs(today));
+
   const [roomId, setRoomId] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [sectionId, setSectionId] = useState("");
-  const [day, setDay] = useState("");
+  const [day, setDay] = useState([]);
 
   const user = useSelector((state) => state.auth.user);
 
@@ -61,7 +62,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
       book_until: bookUntil.format("YYYY-MM-DD"),
     };
 
-    store(body, cookies.AUTH_TOKEN).then((response) =>{
+    store(body, cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
         toast.success(response?.message);
         setOpenCreateBookingsDialog(null);
@@ -70,12 +71,8 @@ const Transition = React.forwardRef(function Transition(props, ref) {
         toast.error(response?.message);
       }
       console.log(body, response);
-      
     });
-
-    
   };
-
 
   return (
     <>
@@ -145,8 +142,10 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel> Day Of Week </InputLabel>
                 <Select
                   fullWidth
-                  value={day || ""}
+                  multiple
+                  value={day || []}
                   onChange={(e) => setDay(e.target.value || "")}
+                  renderValue={(selected) => selected.join(", ")}
                 >
                   <MenuItem value="Monday"> Monday </MenuItem>
                   <MenuItem value="Tuesday"> Tuesday </MenuItem>
@@ -226,7 +225,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
                 <InputLabel>Book Until</InputLabel>
                 <LocalizationProvider dateAdapter={AdapterDayjs}>
                   <MobileDatePicker
-                   value={bookUntil}
+                    value={bookUntil}
                     onChange={(newValue) => setBookUntil(newValue)}
                   />
                 </LocalizationProvider>

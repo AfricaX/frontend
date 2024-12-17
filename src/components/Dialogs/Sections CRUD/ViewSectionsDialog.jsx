@@ -135,33 +135,33 @@ export default function ({
                   .reverse()
                   .map((row) => (
                     <tr key={row.id} className="hover:bg-gray-100">
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {users.find((u) => u.id === row.user_id)?.name ?? ""}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {row.created_at.slice(0, 10) +
                           " " +
                           row.created_at.slice(11, 16)}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {rooms.find((r) => r.id === row.room_id)?.room_name ||
                           ""}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {subject.find((s) => s.id === row.subject_id)
                           ?.subject_name ?? ""}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {sections.find((s) => s.id === row.section_id)
                           ?.section_name ?? ""}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {row.start_time} - {row.end_time}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {row.day_of_week}
                       </td>
-                      <td className="text-left text-[7px] border border-black p-0 sm:text-base">
+                      <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {row.status}
                       </td>
                     </tr>
