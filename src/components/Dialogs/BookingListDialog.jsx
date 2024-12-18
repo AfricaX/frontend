@@ -105,6 +105,44 @@ export default function BookingListDialog({
     return `${formattedHour}:${minutes} ${ampm}`;
   };
 
+  const [filteredRows, setFilteredRows] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const handleSearch = () => {
+    if (searchQuery.trim() === "") {
+      setFilteredRows(rows);
+    } else {
+      const filtered = rows.filter((row) => {
+        const roomName = rooms
+          .find((room) => room.id === row.room_id)
+          ?.room_name?.toLowerCase();
+        const subjectName = subjects
+          .find((subject) => subject.id === row.subject_id)
+          ?.subject_name?.toLowerCase();
+        const sectionName = sections
+          .find((section) => section.id === row.section_id)
+          ?.section_name?.toLowerCase();
+          const status = row.status?.toLowerCase();
+          const day = row.day_of_week?.toLowerCase();
+        return (
+          roomName?.includes(searchQuery.toLowerCase()) ||
+          subjectName?.includes(searchQuery.toLowerCase()) ||
+          sectionName?.includes(searchQuery.toLowerCase()) ||
+          status?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
+          day?.toLowerCase()?.includes(searchQuery.toLowerCase())
+        );
+      });
+      setFilteredRows(filtered);
+    }
+  };
+
+  const handleClearSearch = () => {
+    setSearchQuery("");
+    setFilteredRows(rows);
+  };
+
+  useEffect(() => {
+    setFilteredRows(rows);
+  }, [rows]);
   return (
     <>
       <div
@@ -131,15 +169,29 @@ export default function BookingListDialog({
                 type="text"
                 className="px-4 py-2 border border-gray-300 rounded-md text-[8px] sm:text-base"
                 placeholder="Search..."
+                value={searchQuery || ""}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <button className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md text-[8px] sm:text-base">
+              <button
+                className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-md text-[8px] sm:text-base"
+                onClick={handleSearch}
+              >
                 Search
               </button>
+              <button
+                className="ml-2 px-4 py-2 bg-gray-300 text-black rounded-md text-[8px] sm:text-base"
+                onClick={handleClearSearch}
+              >
+                Reset
+              </button>
             </div>
+
             <button
               className="px-5 py-2 rounded-lg bg-green-500 text-white font-medium md text-[10px] sm:text-base shadow-md hover:bg-green-600 hover:shadow-lg transform transition-all duration-200 "
               onClick={handleOpenCreateBookingsDialog}
-            > + Create booking
+            >
+              {" "}
+              + Create booking
             </button>
           </div>
 
@@ -155,6 +207,9 @@ export default function BookingListDialog({
                   </th>
                   <th className="border border-grey text-[8px] sm:text-base">
                     Room Name
+                  </th>
+                  <th className="border border-grey text-[8px] sm:text-base text-center">
+                    Section
                   </th>
                   <th className="border border-grey text-[8px] sm:text-base text-center">
                     Subject
@@ -174,31 +229,33 @@ export default function BookingListDialog({
                 </tr>
               </thead>
               <tbody>
-                {rows
+                {filteredRows
                   .slice()
                   .reverse()
                   .map((row) => (
                     <tr key={row.id} className="border-b">
                       <td className="border border-grey text-[8px] sm:text-base">
-                        {users.filter((u) => u.id === row.user_id)[0]?.name ??
-                          ""}
+                        {users.find((u) => u.id === row.user_id)?.name || ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
                         {formatDateTime(row.created_at)}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
-                        {rooms.filter((r) => r.id === row.room_id)[0]
-                          ?.room_name || ""}
+                        {rooms.find((r) => r.id === row.room_id)?.room_name ||
+                          ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
-                        {subjects.filter((s) => s.id === row.subject_id)[0]
-                          ?.subject_name ?? ""}
+                        {sections.find((s) => s.id === row.section_id)
+                          ?.section_name || ""}
+                      </td>
+                      <td className="border border-grey text-[8px] sm:text-base text-center">
+                        {subjects.find((s) => s.id === row.subject_id)
+                          ?.subject_name || ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
                         {formatTime(row.start_time)} -{" "}
                         {formatTime(row.end_time)}
                       </td>
-
                       <td className="border border-grey text-[8px] sm:text-base text-center">
                         {row.day_of_week}
                       </td>
