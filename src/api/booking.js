@@ -9,6 +9,7 @@ export const store = async (body, token) => {
       Authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(body),
+    
   });
   return await reponse.json();
 };

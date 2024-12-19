@@ -8,32 +8,15 @@ import { getSubjects } from "../../api/subject";
 export default function Recents() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [rows, setRows] = useState([]);
-  const [rooms, setRooms] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [subject, setSubject] = useState([]);
+
 
   const retrieve = () => {
     indexBookings(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
+      if (response?.data) {
         setRows(response.data);
-      }
-    });
-
-    retrieveRooms(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setRooms(response.data);
-      }
-    });
-
-    getUsers(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setUsers(response.data);
-      }
-    });
-
-    getSubjects(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setSubject(response.data);
+        console.log("Bookings Retrieved:", response.data);
+      } else {
+        console.error("Failed to fetch bookings", response);
       }
     });
   };
@@ -103,17 +86,16 @@ export default function Recents() {
                 .map((row) => (
                   <tr key={row.id}>
                     <td className="border border-black p-1">
-                      {users.find((u) => u.id === row.user_id)?.name ?? ""}
+                      {row?.users?.name || ""}
                     </td>
                     <td className="border border-black p-1">
                       {formatDateTime(row.created_at)}
                     </td>
                     <td className="border border-black p-1">
-                      {rooms.find((r) => r.id === row.room_id)?.room_name || ""}
+                      {row.rooms?.room_name || ""}
                     </td>
                     <td className="border border-black p-1 text-center">
-                      {subject.find((s) => s.id === row.subject_id)
-                        ?.subject_name ?? ""}
+                      {row.subjects?.subject_name || ""}
                     </td>
                     <td className="border border-black p-1 text-center">
                       {formatTime(row.start_time)} - {formatTime(row.end_time)}

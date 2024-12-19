@@ -4,7 +4,6 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { useCookies } from "react-cookie";
 import { indexBookings } from "../../api/booking";
 import { retrieveRooms } from "../../api/room";
-import { getUsers } from "../../api/user";
 import { getSubjects } from "../../api/subject";
 import { getSections } from "../../api/section";
 import CreateBookingsDialog from "./Bookings CRUD/CreateBookingsDialog";
@@ -18,39 +17,27 @@ export default function BookingListDialog({
   const [cookies] = useCookies(["AUTH_TOKEN"]);
   const [rows, setRows] = useState([]);
   const [rooms, setRooms] = useState([]);
-  const [users, setUsers] = useState([]);
   const [subjects, setSubjects] = useState([]);
   const [sections, setSections] = useState([]);
 
   const retrieve = () => {
     indexBookings(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
+      if (response?.data) {
         setRows(response.data);
+        console.log(response.data);
       }
     });
 
     retrieveRooms(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setRooms(response.data);
-      }
-    });
-
-    getUsers(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setUsers(response.data);
-      }
+      if (response?.data) { setRooms(response.data); } 
     });
 
     getSubjects(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setSubjects(response.data);
-      }
+      if (response?.data) { setSubjects(response.data); } 
     });
 
     getSections(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setSections(response.data);
-      }
+      if (response?.data) { setSections(response.data); } 
     });
   };
 
@@ -112,25 +99,21 @@ export default function BookingListDialog({
       setFilteredRows(rows);
     } else {
       const filtered = rows.filter((row) => {
-        const roomName = rooms
-          .find((room) => room.id === row.room_id)
-          ?.room_name?.toLowerCase();
-        const subjectName = subjects
-          .find((subject) => subject.id === row.subject_id)
-          ?.subject_name?.toLowerCase();
-        const sectionName = sections
-          .find((section) => section.id === row.section_id)
-          ?.section_name?.toLowerCase();
-          const status = row.status?.toLowerCase();
-          const day = row.day_of_week?.toLowerCase();
+        const roomName = row.rooms?.room_name?.toLowerCase();
+        const subjectName = row.subjects?.subject_name?.toLowerCase();
+        const sectionName = row.sections?.section_name?.toLowerCase();
+        const status = row.status?.toLowerCase();
+        const day = row.day_of_week?.toLowerCase();
+
         return (
           roomName?.includes(searchQuery.toLowerCase()) ||
           subjectName?.includes(searchQuery.toLowerCase()) ||
           sectionName?.includes(searchQuery.toLowerCase()) ||
-          status?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-          day?.toLowerCase()?.includes(searchQuery.toLowerCase())
+          status?.includes(searchQuery.toLowerCase()) ||
+          day?.includes(searchQuery.toLowerCase())
         );
       });
+
       setFilteredRows(filtered);
     }
   };
@@ -235,22 +218,19 @@ export default function BookingListDialog({
                   .map((row) => (
                     <tr key={row.id} className="border-b">
                       <td className="border border-grey text-[8px] sm:text-base">
-                        {users.find((u) => u.id === row.user_id)?.name || ""}
+                        {row.users?.name ?? ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
                         {formatDateTime(row.created_at)}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base">
-                        {rooms.find((r) => r.id === row.room_id)?.room_name ||
-                          ""}
+                        {row.rooms?.room_name ?? ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
-                        {sections.find((s) => s.id === row.section_id)
-                          ?.section_name || ""}
+                        {row.sections?.section_name ?? ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
-                        {subjects.find((s) => s.id === row.subject_id)
-                          ?.subject_name || ""}
+                        {row.subjects?.subject_name ?? ""}
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
                         {formatTime(row.start_time)} -{" "}
@@ -281,21 +261,21 @@ export default function BookingListDialog({
           </div>
 
           <CreateBookingsDialog
-            rooms={rooms}
-            sections={sections}
-            subjects={subjects}
             retrieve={retrieve}
             openCreateBookingsDialog={openCreateBookingsDialog}
             setOpenCreateBookingsDialog={setOpenCreateBookingsDialog}
+            rooms={rooms} 
+            subjects={subjects}
+            sections={sections}
           />
 
           <EditBookingsDialog
-            rooms={rooms}
-            sections={sections}
-            subjects={subjects}
             retrieve={retrieve}
             openEditBookingsDialog={openEditBookingsDialog}
             setOpenEditBookingsDialog={setOpenEditBookingsDialog}
+            rooms={rooms}
+            subjects={subjects}
+            sections={sections}
           />
 
           <DeleteBookingsDialog

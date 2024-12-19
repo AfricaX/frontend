@@ -53,7 +53,6 @@ export default function EditRoomsDialog({
   const getRoomTypes = () => {
     retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
       setRowRoomTypes(response.data);
-      console.log(response.data);
     });
   };
 
