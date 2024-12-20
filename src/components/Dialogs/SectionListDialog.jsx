@@ -21,8 +21,10 @@ export default function SectionListDialog({
   };
 
   useEffect(() => {
-    retrieve();
-  }, []);
+    if (openSectionListDialog) {
+      retrieve();
+    }
+  }, [openSectionListDialog]);
 
   const [openCreateSectionDialog, setOpenCreateSectionDialog] = useState(false);
   const [openViewSectionsDialog, setOpenViewSectionsDialog] = useState(null);

@@ -35,16 +35,18 @@ export default function EditRoomsDialog({
       capacity: openEditRoomsDialog?.capacity,
     };
 
-    updateRoom(body, cookies.AUTH_TOKEN, openEditRoomsDialog?.id).then((response) => {
-      if (response?.ok) {
-        toast.success(response?.message);
-        setOpenEditRoomsDialog(null);
-        retrieve();
-      } else {
-        toast.error(response?.message);
+    updateRoom(body, cookies.AUTH_TOKEN, openEditRoomsDialog?.id).then(
+      (response) => {
+        if (response?.ok) {
+          toast.success(response?.message);
+          setOpenEditRoomsDialog(null);
+          retrieve();
+        } else {
+          toast.error(response?.message);
+        }
+        console.log("Submitting body:", body, response);
       }
-      console.log("Submitting body:", body, response );
-    });
+    );
   };
 
   const [rowRoomTypes, setRowRoomTypes] = useState([]);
@@ -57,8 +59,10 @@ export default function EditRoomsDialog({
   };
 
   useEffect(() => {
-    getRoomTypes();
-  }, []);
+    if (openEditRoomsDialog) {
+      getRoomTypes();
+    }
+  }, [openEditRoomsDialog]);
 
   return (
     <>
@@ -161,7 +165,13 @@ export default function EditRoomsDialog({
                 fullWidth
               ></TextField>
             </Box>
-            <Box sx={{ display: "flex", justifyContent: "space-between" , marginTop: "1rem"}}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                marginTop: "1rem",
+              }}
+            >
               <Box>
                 <Button
                   onClick={() => setOpenEditRoomsDialog(null)}

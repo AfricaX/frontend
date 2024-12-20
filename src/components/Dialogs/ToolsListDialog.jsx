@@ -21,27 +21,26 @@ export default function ToolsListDialog({
   openToolsListDialog,
   setOpenToolsListDialog,
 }) {
+  const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
+  const [subjects, setSubjects] = useState([]);
+  const [roomtypes, setRoomTypes] = useState([]);
+  /**
+   * retrieve
+   */
 
-    const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
-    const [subjects, setSubjects] = useState([]);
-    const [ roomtypes, setRoomTypes ] = useState([]);
-/**
- * retrieve
- */
+  const retrieve = () => {
+    getSubjects(cookies.AUTH_TOKEN).then((response) => {
+      if (response?.ok) {
+        setSubjects(response.data);
+      }
+    });
 
-const retrieve = () => {
-  getSubjects(cookies.AUTH_TOKEN).then((response) => {
-    if (response?.ok) {
-      setSubjects(response.data);
-    }
-  })
-
-  retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
-    if (response?.ok) {
-      setRoomTypes(response.data);
-    }
-  })
-};
+    retrieveRoomTypes(cookies.AUTH_TOKEN).then((response) => {
+      if (response?.ok) {
+        setRoomTypes(response.data);
+      }
+    });
+  };
 
   /**
    * Create Subject Dialog
@@ -57,15 +56,18 @@ const retrieve = () => {
    * Create Room Type Dialog
    */
 
-  const [ openCreateRoomTypeDialog, setOpenCreateRoomTypeDialog ] = useState(false);
+  const [openCreateRoomTypeDialog, setOpenCreateRoomTypeDialog] =
+    useState(false);
 
   const handleOpenCreateRoomTypeDialog = () => {
     setOpenCreateRoomTypeDialog(true);
-  }
+  };
 
   useEffect(() => {
-    retrieve();
-  }, []);
+    if (openToolsListDialog) {
+      retrieve();
+    }
+  }, [openToolsListDialog]);
 
   return (
     <>
@@ -73,7 +75,7 @@ const retrieve = () => {
         <DialogContent>
           <Box sx={{ width: "200px" }}>
             <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-              <Box >
+              <Box>
                 <Typography
                   sx={{
                     fontSize: "20px",

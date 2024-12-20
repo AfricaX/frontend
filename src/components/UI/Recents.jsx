@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useCookies } from "react-cookie";
 import { indexBookings } from "../../api/booking";
-import { retrieveRooms } from "../../api/room";
-import { getUsers } from "../../api/user";
-import { getSubjects } from "../../api/subject";
 
 export default function Recents() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [rows, setRows] = useState([]);
-
+  const [loading, setLoading] = useState(false);
+  const rowsPerPage = 10; 
+  const tableRef = useRef(null); 
 
   const retrieve = () => {
-    indexBookings(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.data) {
-        setRows(response.data);
+    if (loading) return; 
+
+    setLoading(true);
+    indexBookings(
+      cookies.AUTH_TOKEN,
+      rows.length / rowsPerPage + 1,
+      rowsPerPage
+    ).then((response) => {
+      if (response?.ok) {
+        setRows((prevRows) => [...prevRows, ...response.data]);
+        setLoading(false);
         console.log("Bookings Retrieved:", response.data);
       } else {
         console.error("Failed to fetch bookings", response);
+        setLoading(false);
       }
     });
   };
@@ -25,10 +33,27 @@ export default function Recents() {
     retrieve();
   }, []);
 
+  const handleScroll = () => {
+    if (tableRef.current) {
+      const bottom = tableRef.current.getBoundingClientRect().bottom;
+      const windowHeight = window.innerHeight;
+      if (bottom <= windowHeight + 100 && !loading) {
+        retrieve();
+      }
+    }
+  };
+
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [loading]);
+
   /**
    * Date Formatter
    */
-
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
     const options = {
@@ -60,7 +85,10 @@ export default function Recents() {
         <div className="text-2xl font-bold text-[#2f3a8f] mb-4">
           Recent Class Scheduled
         </div>
-        <div className="overflow-x-auto max-w-full scrollbar-hide">
+        <div
+          className="overflow-x-auto max-w-full scrollbar-hide"
+          ref={tableRef}
+        >
           <table className="min-w-full table-auto border border-black p-1 text-[8px] lg:text-[15px]">
             <thead className="bg-gray-100">
               <tr>
@@ -80,36 +108,38 @@ export default function Recents() {
               </tr>
             </thead>
             <tbody>
-              {rows
-                .slice()
-                .reverse()
-                .map((row) => (
-                  <tr key={row.id}>
-                    <td className="border border-black p-1">
-                      {row?.users?.name || ""}
-                    </td>
-                    <td className="border border-black p-1">
-                      {formatDateTime(row.created_at)}
-                    </td>
-                    <td className="border border-black p-1">
-                      {row.rooms?.room_name || ""}
-                    </td>
-                    <td className="border border-black p-1 text-center">
-                      {row.subjects?.subject_name || ""}
-                    </td>
-                    <td className="border border-black p-1 text-center">
-                      {formatTime(row.start_time)} - {formatTime(row.end_time)}
-                    </td>
-                    <td className="border border-black p-1 text-center">
-                      {row.day_of_week}
-                    </td>
-                    <td className="border border-black p-1 text-center">
-                      {row.status}
-                    </td>
-                  </tr>
-                ))}
+              {rows.reverse().map((row) => (
+                <tr key={row.id}>
+                  <td className="border border-black p-1">
+                    {row?.users?.name || ""}
+                  </td>
+                  <td className="border border-black p-1">
+                    {formatDateTime(row.created_at)}
+                  </td>
+                  <td className="border border-black p-1">
+                    {row.rooms?.room_name || ""}
+                  </td>
+                  <td className="border border-black p-1 text-center">
+                    {row.subjects?.subject_name || ""}
+                  </td>
+                  <td className="border border-black p-1 text-center">
+                    {formatTime(row.start_time)} - {formatTime(row.end_time)}
+                  </td>
+                  <td className="border border-black p-1 text-center">
+                    {row.day_of_week}
+                  </td>
+                  <td className="border border-black p-1 text-center">
+                    {row.status}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          {loading && (
+            <div className="flex justify-center py-4">
+              <span>Loading...</span>
+            </div>
+          )}
         </div>
       </div>
     </div>

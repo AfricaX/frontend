@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import Dialog from "@mui/material/Dialog";
@@ -25,7 +25,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 export default function CreateSectionsDialog({
   openCreateSectionDialog,
   setOpenCreateSectionDialog,
-  retrieve
+  retrieve,
 }) {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [types, setTypes] = useState("");

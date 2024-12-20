@@ -46,10 +46,13 @@ export default function RoomsListDialog({
     });
   };
 
+
   useEffect(() => {
-    getRoomTypes();
-    retrieve();
-  }, []);
+    if (openRoomsListDialog) {
+      getRoomTypes();
+      retrieve();
+    }
+  }, [openRoomsListDialog]);
 
   /**
    * CreateRoomsDialog

@@ -44,24 +44,6 @@ export default function ({
       }
     });
 
-    retrieveRooms(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setRooms(response.data);
-      }
-    });
-
-    getUsers(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setUsers(response.data);
-      }
-    });
-
-    getSubjects(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.ok) {
-        setSubject(response.data);
-      }
-    });
-
     getSections(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
         setSections(response.data);
@@ -70,8 +52,38 @@ export default function ({
   };
 
   useEffect(() => {
-    retrieve();
-  }, []);
+    if (openViewSectionsDialog) {
+      retrieve();
+    }
+  }, [openViewSectionsDialog]);
+
+  /**
+   * Date Formatter
+   */
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const options = {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    };
+
+    const formattedDate = date.toISOString().split("T")[0];
+    const formattedTime = date.toLocaleTimeString([], options);
+
+    return `${formattedDate} ${formattedTime}`;
+  };
+
+  /**
+   * Time Formatter
+   */
+  const formatTime = (timeString) => {
+    const [hours, minutes] = timeString.split(":");
+    const hour = parseInt(hours, 10);
+    const ampm = hour >= 12 ? "PM" : "AM";
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12; // Convert 0 and 12 to 12
+    return `${formattedHour}:${minutes} ${ampm}`;
+  };
 
   return (
     <>
@@ -136,27 +148,23 @@ export default function ({
                   .map((row) => (
                     <tr key={row.id} className="hover:bg-gray-100">
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {users.find((u) => u.id === row.user_id)?.name ?? ""}
+                        {row.users?.name ?? ""}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {row.created_at.slice(0, 10) +
-                          " " +
-                          row.created_at.slice(11, 16)}
+                        {formatDateTime(row.created_at)}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {rooms.find((r) => r.id === row.room_id)?.room_name ||
-                          ""}
+                        {row.rooms?.room_name ?? ""}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {subject.find((s) => s.id === row.subject_id)
-                          ?.subject_name ?? ""}
+                        {row.subjects?.subject_name ?? ""}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {sections.find((s) => s.id === row.section_id)
-                          ?.section_name ?? ""}
+                        {row.sections?.section_name ?? ""}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
-                        {row.start_time} - {row.end_time}
+                        {formatTime(row.start_time)} -{" "}
+                        {formatTime(row.end_time)}
                       </td>
                       <td className="text-center text-[7px] border border-black p-0 sm:text-base">
                         {row.day_of_week}

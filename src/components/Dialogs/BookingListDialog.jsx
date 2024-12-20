@@ -22,28 +22,36 @@ export default function BookingListDialog({
 
   const retrieve = () => {
     indexBookings(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.data) {
+      if (response?.ok) {
         setRows(response.data);
         console.log(response.data);
       }
     });
 
     retrieveRooms(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.data) { setRooms(response.data); } 
+      if (response?.data) {
+        setRooms(response.data);
+      }
     });
 
     getSubjects(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.data) { setSubjects(response.data); } 
+      if (response?.data) {
+        setSubjects(response.data);
+      }
     });
 
     getSections(cookies.AUTH_TOKEN).then((response) => {
-      if (response?.data) { setSections(response.data); } 
+      if (response?.data) {
+        setSections(response.data);
+      }
     });
   };
 
   useEffect(() => {
-    retrieve();
-  }, []);
+    if (openBookingListDialog) {
+      retrieve();
+    }
+  }, [openBookingListDialog]);
 
   const [openCreateBookingsDialog, setOpenCreateBookingsDialog] =
     useState(false);
@@ -264,7 +272,7 @@ export default function BookingListDialog({
             retrieve={retrieve}
             openCreateBookingsDialog={openCreateBookingsDialog}
             setOpenCreateBookingsDialog={setOpenCreateBookingsDialog}
-            rooms={rooms} 
+            rooms={rooms}
             subjects={subjects}
             sections={sections}
           />
