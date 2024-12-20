@@ -34,15 +34,15 @@ function CreateBookingsDialog({
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const today = dayjs();
 
-  const [startTime, setStartTime] = useState(dayjs(today));
-  const [endTime, setEndTime] = useState(dayjs(today));
-  const [bookFrom, setBookFrom] = useState(dayjs(today));
-  const [bookUntil, setBookUntil] = useState(dayjs(today));
+  const [bookFrom, setBookFrom] = useState(dayjs().startOf("day"));
+  const [bookUntil, setBookUntil] = useState(dayjs().endOf("day"));
+  const [startTime, setStartTime] = useState(dayjs().startOf("hour"));
+  const [endTime, setEndTime] = useState(dayjs().add(1, "hour"));
+  const [day, setDay] = useState([]);
 
   const [roomId, setRoomId] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [sectionId, setSectionId] = useState("");
-  const [day, setDay] = useState([]);
 
   const user = useSelector((state) => state.auth.user);
 

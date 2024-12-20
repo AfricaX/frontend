@@ -76,7 +76,7 @@ export default function Recents() {
               </tr>
             </thead>
             <tbody>
-              {rows.reverse().map((row) => (
+              {rows.slice().reverse().map((row) => (
                 <tr key={row.id}>
                   <td className="border border-black p-1">
                     {row?.users?.name || ""}

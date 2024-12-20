@@ -39,9 +39,30 @@ export default function EditBookingsDialog({
   const [roomId, setRoomId] = useState("");
   const [subjectId, setSubjectId] = useState("");
   const [sectionId, setSectionId] = useState("");
-  const [day, setDay] = useState("");
+  const [day, setDay] = useState([]);
 
   const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (openEditBookingsDialog) {
+      setRoomId(openEditBookingsDialog.room_id || "");
+      setSubjectId(openEditBookingsDialog.subject_id || "");
+      setSectionId(openEditBookingsDialog.section_id || "");
+      setDay(
+        Array.isArray(openEditBookingsDialog.day_of_week)
+          ? openEditBookingsDialog.day_of_week
+          : []
+      );
+      setStartTime(dayjs(openEditBookingsDialog.start_time, "HH:mm") || null);
+      setEndTime(dayjs(openEditBookingsDialog.end_time, "HH:mm") || null);
+      setBookFrom(
+        dayjs(openEditBookingsDialog.book_from, "YYYY-MM-DD") || null
+      );
+      setBookUntil(
+        dayjs(openEditBookingsDialog.book_until, "YYYY-MM-DD") || null
+      );
+    }
+  }, [openEditBookingsDialog]);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -49,10 +70,10 @@ export default function EditBookingsDialog({
     const body = {
       user_id: user?.id,
       status: openEditBookingsDialog?.status,
-      room_id: openEditBookingsDialog?.room_id,
-      subject_id: openEditBookingsDialog?.subject_id,
-      section_id: openEditBookingsDialog?.section_id,
-      day_of_week: openEditBookingsDialog?.day_of_week,
+      room_id: openEditBookingsDialog?.room_id || roomId,
+      subject_id: openEditBookingsDialog?.subject_id || subjectId,
+      section_id: openEditBookingsDialog?.section_id || sectionId,
+      day_of_week: Array.isArray(day) ? day : [],
       start_time: startTime?.format("HH:mm"),
       end_time: endTime?.format("HH:mm"),
       book_from: bookFrom?.format("YYYY-MM-DD"),
@@ -73,6 +94,11 @@ export default function EditBookingsDialog({
       }
     );
   };
+  useEffect(() => {
+    if (openEditBookingsDialog) {
+      setDay(openEditBookingsDialog.day_of_week || []); // Ensure day_of_week is an array.
+    }
+  }, [openEditBookingsDialog]);
 
   return (
     <>
@@ -92,8 +118,8 @@ export default function EditBookingsDialog({
                 <InputLabel> Room </InputLabel>
                 <Select
                   fullWidth
-                  value={openEditBookingsDialog?.room_id || ""}
-                  onChange={(e) => setRoomId(e.target.value || "")}
+                  value={roomId}
+                  onChange={(e) => setRoomId(e.target.value)}
                 >
                   {rooms?.length > 0 ? (
                     rooms.map((room) => (
@@ -110,8 +136,8 @@ export default function EditBookingsDialog({
                 <InputLabel> Subject </InputLabel>
                 <Select
                   fullWidth
-                  value={openEditBookingsDialog?.subject_id || ""}
-                  onChange={(e) => setSubjectId(e.target.value || "")}
+                  value={subjectId}
+                  onChange={(e) => setSubjectId(e.target.value)}
                 >
                   {subjects?.length > 0 ? (
                     subjects.map((subject) => (
@@ -139,8 +165,10 @@ export default function EditBookingsDialog({
                 <InputLabel> Day Of Week </InputLabel>
                 <Select
                   fullWidth
-                  value={openEditBookingsDialog?.day_of_week || ""}
-                  onChange={(e) => setDay(e.target.value || "")}
+                  multiple
+                  value={Array.isArray(day) ? day : []}
+                  onChange={(e) => setDay(e.target.value || [])}
+                  renderValue={(selected) => selected.join(", ")}
                 >
                   <MenuItem value="Monday"> Monday </MenuItem>
                   <MenuItem value="Tuesday"> Tuesday </MenuItem>
@@ -155,8 +183,8 @@ export default function EditBookingsDialog({
                 <InputLabel> Section </InputLabel>
                 <Select
                   fullWidth
-                  value={openEditBookingsDialog?.section_id || ""}
-                  onChange={(e) => setSectionId(e.target.value || "")}
+                  value={sectionId}
+                  onChange={(e) => setSectionId(e.target.value)}
                 >
                   {sections?.length > 0 ? (
                     sections.map((section) => (
