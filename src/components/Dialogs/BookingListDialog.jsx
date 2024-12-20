@@ -23,9 +23,7 @@ export default function BookingListDialog({
   const retrieve = () => {
     indexBookings(cookies.AUTH_TOKEN).then((response) => {
       if (response?.ok) {
-        setRows(response.data);
-        console.log(response.data);
-      }
+        setRows(response.data);      }
     });
 
     retrieveRooms(cookies.AUTH_TOKEN).then((response) => {

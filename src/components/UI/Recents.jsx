@@ -5,26 +5,12 @@ import { indexBookings } from "../../api/booking";
 export default function Recents() {
   const [cookies, setCookie, removeCookie] = useCookies(["AUTH_TOKEN"]);
   const [rows, setRows] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const rowsPerPage = 10; 
-  const tableRef = useRef(null); 
+  const tableRef = useRef(null);
 
   const retrieve = () => {
-    if (loading) return; 
-
-    setLoading(true);
-    indexBookings(
-      cookies.AUTH_TOKEN,
-      rows.length / rowsPerPage + 1,
-      rowsPerPage
-    ).then((response) => {
-      if (response?.ok) {
-        setRows((prevRows) => [...prevRows, ...response.data]);
-        setLoading(false);
-        console.log("Bookings Retrieved:", response.data);
-      } else {
-        console.error("Failed to fetch bookings", response);
-        setLoading(false);
+    indexBookings(cookies.AUTH_TOKEN).then((response) => {
+      if (response?.data) {
+        setRows(response.data);
       }
     });
   };
@@ -32,24 +18,6 @@ export default function Recents() {
   useEffect(() => {
     retrieve();
   }, []);
-
-  const handleScroll = () => {
-    if (tableRef.current) {
-      const bottom = tableRef.current.getBoundingClientRect().bottom;
-      const windowHeight = window.innerHeight;
-      if (bottom <= windowHeight + 100 && !loading) {
-        retrieve();
-      }
-    }
-  };
-
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [loading]);
 
   /**
    * Date Formatter
@@ -75,7 +43,7 @@ export default function Recents() {
     const [hours, minutes] = timeString.split(":");
     const hour = parseInt(hours, 10);
     const ampm = hour >= 12 ? "PM" : "AM";
-    const formattedHour = hour % 12 === 0 ? 12 : hour % 12; // Convert 0 and 12 to 12
+    const formattedHour = hour % 12 === 0 ? 12 : hour % 12;
     return `${formattedHour}:${minutes} ${ampm}`;
   };
 
@@ -135,11 +103,6 @@ export default function Recents() {
               ))}
             </tbody>
           </table>
-          {loading && (
-            <div className="flex justify-center py-4">
-              <span>Loading...</span>
-            </div>
-          )}
         </div>
       </div>
     </div>
