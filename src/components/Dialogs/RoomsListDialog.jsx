@@ -17,6 +17,7 @@ import ViewRoomsDialog from "../Dialogs/Rooms CRUD/ViewRoomsDialog";
 import EditRoomsDialog from "../Dialogs/Rooms CRUD/EditRoomsDialog";
 import DeleteRoomsDialog from "../Dialogs/Rooms CRUD/DeleteRoomsDialog";
 import { retrieveRoomTypes } from "../../api/roomtype";
+import { useSelector } from "react-redux";
 
 export default function RoomsListDialog({
   openRoomsListDialog,
@@ -71,7 +72,7 @@ export default function RoomsListDialog({
   const handleOpenViewRoomsDialog = (row) => {
     setOpenViewRoomsDialog(row);
   };
-
+  const user = useSelector((state) => state.auth.user);
   /**
    * Edit Rooms Dialog
    */
@@ -152,7 +153,9 @@ export default function RoomsListDialog({
                     <th className="border p-1 text-center">Location</th>
                     <th className="border p-1 text-center">Description</th>
                     <th className="border text-center">Capacity</th>
-                    <th className="border p-1 text-center">Actions</th>
+                    {user?.role === "admin" ? (
+                      <th className="border p-1 text-center">Actions</th>
+                    ):null}
                   </tr>
                 </thead>
                 <tbody>
@@ -172,7 +175,8 @@ export default function RoomsListDialog({
                       </td>
                       <td className="border text-center">{row.capacity}</td>
                       <td className="border p-1 text-center">
-                        <Box className="flex justify-around">
+                        {user?.role === "admin" ? (
+                          <Box className="flex justify-around">
                           <VisibilityIcon
                             aria-label="View Room"
                             onClick={() => handleOpenViewRoomsDialog(row)}
@@ -189,6 +193,7 @@ export default function RoomsListDialog({
                             fontSize="small"
                           />
                         </Box>
+                        ):null}
                       </td>
                     </tr>
                   ))}

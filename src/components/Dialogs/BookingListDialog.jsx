@@ -9,6 +9,7 @@ import { getSections } from "../../api/section";
 import CreateBookingsDialog from "./Bookings CRUD/CreateBookingsDialog";
 import EditBookingsDialog from "./Bookings CRUD/EditBookingsDialog";
 import DeleteBookingsDialog from "./Bookings CRUD/DeleteBookingsDialog";
+import { useSelector } from "react-redux";
 
 export default function BookingListDialog({
   openBookingListDialog,
@@ -97,7 +98,7 @@ export default function BookingListDialog({
     const formattedHour = hour % 12 === 0 ? 12 : hour % 12; // Convert 0 and 12 to 12
     return `${formattedHour}:${minutes} ${ampm}`;
   };
-
+  const user = useSelector((state) => state.auth.user);
   const [filteredRows, setFilteredRows] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const handleSearch = () => {
@@ -212,9 +213,13 @@ export default function BookingListDialog({
                   <th className="border border-grey text-[8px] sm:text-base text-center">
                     Status
                   </th>
-                  <th className="border border-grey text-[8px] sm:text-base text-center">
-                    Actions
-                  </th>
+                  {
+                    user?.role == "admin" ? (
+                      <th className="border border-grey text-[8px] sm:text-base text-center">
+                        Action
+                      </th>
+                    ):null
+                  }
                 </tr>
               </thead>
               <tbody>
@@ -250,7 +255,9 @@ export default function BookingListDialog({
                       </td>
                       <td className="border border-grey text-[8px] sm:text-base text-center">
                         <div className="flex justify-center space-x-4">
-                          <EditIcon
+                         {user?.role === "admin" ? (
+                           <>
+                            <EditIcon
                             className="text-blue-500 cursor-pointer text-[8px] sm:text-base"
                             onClick={() => handleOpenEditBookingsDialog(row)}
                           />
@@ -258,6 +265,8 @@ export default function BookingListDialog({
                             className="text-red-500 cursor-pointer text-[8px] sm:text-base"
                             onClick={() => handleOpenDeleteBookingsDialog(row)}
                           />
+                           </>
+                         ):null}
                         </div>
                       </td>
                     </tr>
