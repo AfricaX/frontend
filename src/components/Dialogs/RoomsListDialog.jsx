@@ -101,7 +101,7 @@ export default function RoomsListDialog({
         <div className="relative w-full max-w-4xl bg-white rounded-lg shadow-2xl overflow-auto">
           <div className="flex justify-between items-center px-6 py-4 bg-gradient-to-r from-blue-600 to-blue-800 text-white">
             <h2 className="text-2xl font-semibold tracking-wide">
-              List Of Sections
+              List Of Rooms
             </h2>
             <button
               className="text-white hover:text-red-400 transition-transform transform hover:scale-110"
@@ -116,7 +116,7 @@ export default function RoomsListDialog({
               onClick={handleOpenCreateRooms}
               className="px-5 py-2 rounded-lg bg-green-500 text-white font-medium shadow-md hover:bg-green-600 hover:shadow-lg transform transition-all duration-200"
             >
-              + Create Section
+              + Create Room
             </button>
           </div>
 
